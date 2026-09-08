@@ -1,0 +1,1019 @@
+// ═══════════════════════════════════════════════════════════════
+// Betla Eco-Companion — Prisma Schema
+// Module 1: Identity, Authentication & Access Control
+// ═══════════════════════════════════════════════════════════════
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Enums ─────────────────────────────────────────────────────
+
+enum UserStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+  BLOCKED
+  DEACTIVATED
+}
+
+enum RoleName {
+  TOURIST
+  GUIDE
+  HOMESTAY
+  ADMIN
+  FOREST_AUTHORITY
+}
+
+enum VerificationTokenType {
+  EMAIL_VERIFICATION
+  PHONE_VERIFICATION
+  PASSWORD_RESET
+}
+
+// ── User ──────────────────────────────────────────────────────
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  email        String     @unique @db.VarChar(255)
+  phone        String?    @unique @db.VarChar(20)
+  passwordHash String     @db.VarChar(255)
+  firstName    String     @db.VarChar(100)
+  lastName     String     @db.VarChar(100)
+  status       UserStatus @default(PENDING_VERIFICATION)
+  emailVerified Boolean   @default(false)
+  phoneVerified Boolean   @default(false)
+  loginAttempts Int       @default(0)
+  lockedUntil   DateTime?
+  lastLoginAt   DateTime?
+
+  // Relations
+  roleId       String     @db.Uuid
+  role         Role       @relation(fields: [roleId], references: [id])
+  sessions     Session[]
+  verificationTokens VerificationToken[]
+  touristProfile     TouristProfile?
+  guideProfile       GuideProfile?
+  homestayProfile    HomestayProfile?
+  profileDocuments   ProfileDocument[]
+  reportedIncidents  Incident[]          @relation("ReportedIncidents")
+  assignedIncidents  Incident[]          @relation("AssignedIncidents")
+  incidentUpdates    IncidentUpdate[]
+  issuedAlerts       SafetyAlert[]
+  reportedEcoReports EcoReport[]         @relation("ReportedEcoReports")
+  assignedEcoReports EcoReport[]         @relation("AssignedEcoReports")
+  ecoUpdates         EcoUpdate[]
+  bookings           Booking[]
+  cancellations      BookingCancellation[]
+  trips              Trip[]
+  notifications      Notification[]
+  notificationPreference NotificationPreference?
+  reviews            Review[]
+  reviewResponses    ReviewResponse[]
+  auditLogs          AuditLog[]
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([roleId])
+  @@map("users")
+}
+
+// ── Role ──────────────────────────────────────────────────────
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        RoleName @unique
+  description String?  @db.VarChar(255)
+
+  // Relations
+  users       User[]
+  rolePermissions RolePermission[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("roles")
+}
+
+// ── Permission ────────────────────────────────────────────────
+
+model Permission {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.VarChar(255)
+  resource    String   @db.VarChar(50)
+  action      String   @db.VarChar(50)
+
+  // Relations
+  rolePermissions RolePermission[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([resource, action])
+  @@map("permissions")
+}
+
+// ── Role-Permission Mapping ───────────────────────────────────
+
+model RolePermission {
+  id           String     @id @default(uuid()) @db.Uuid
+  roleId       String     @db.Uuid
+  permissionId String     @db.Uuid
+
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime   @default(now())
+
+  @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+// ── Session (Refresh Tokens) ──────────────────────────────────
+
+model Session {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String   @db.Uuid
+  refreshTokenHash String  @db.VarChar(255)
+  userAgent       String?  @db.VarChar(500)
+  ipAddress       String?  @db.VarChar(45)
+  expiresAt       DateTime
+  isRevoked       Boolean  @default(false)
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([refreshTokenHash])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+// ── Verification Token ────────────────────────────────────────
+
+model VerificationToken {
+  id          String                @id @default(uuid()) @db.Uuid
+  userId      String                @db.Uuid
+  tokenHash   String                @db.VarChar(255)
+  type        VerificationTokenType
+  expiresAt   DateTime
+  usedAt      DateTime?
+
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime              @default(now())
+
+  @@index([tokenHash])
+  @@index([userId, type])
+  @@index([expiresAt])
+  @@map("verification_tokens")
+}
+
+// ── Module 2 Enums ────────────────────────────────────────────
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum DocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ── Tourist Profile ───────────────────────────────────────────
+
+model TouristProfile {
+  id                String    @id @default(uuid()) @db.Uuid
+  userId            String    @unique @db.Uuid
+  fullName          String    @db.VarChar(150)
+  profileImage      String?   @db.VarChar(500)
+  dateOfBirth       DateTime? @db.Date
+  gender            String?   @db.VarChar(20)
+  address           String?   @db.VarChar(255)
+  city              String?   @db.VarChar(100)
+  state             String?   @db.VarChar(100)
+  country           String?   @db.VarChar(100)
+  postalCode        String?   @db.VarChar(20)
+  profileCompletion Int       @default(0)
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("tourist_profiles")
+}
+
+// ── Guide Profile ─────────────────────────────────────────────
+
+model GuideProfile {
+  id                 String             @id @default(uuid()) @db.Uuid
+  userId             String             @unique @db.Uuid
+  fullName           String             @db.VarChar(150)
+  profileImage       String?            @db.VarChar(500)
+  bio                String?            @db.Text
+  experienceYears    Int                @default(0)
+  languages          String[]           @default([])
+  specializations    String[]           @default([])
+  address            String?            @db.VarChar(255)
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  profileCompletion  Int                @default(0)
+
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([verificationStatus])
+  @@map("guide_profiles")
+}
+
+// ── Homestay Profile ──────────────────────────────────────────
+
+model HomestayProfile {
+  id                 String             @id @default(uuid()) @db.Uuid
+  userId             String             @unique @db.Uuid
+  propertyName       String             @db.VarChar(200)
+  ownerName          String             @db.VarChar(150)
+  description        String?            @db.Text
+  contactPhone       String?            @db.VarChar(20)
+  address            String?            @db.VarChar(255)
+  city               String?            @db.VarChar(100)
+  state              String?            @db.VarChar(100)
+  country            String?            @db.VarChar(100)
+  latitude           Float?
+  longitude          Float?
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  profileCompletion  Int                @default(0)
+
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([verificationStatus])
+  @@map("homestay_profiles")
+}
+
+// ── Profile Document ──────────────────────────────────────────
+
+model ProfileDocument {
+  id           String         @id @default(uuid()) @db.Uuid
+  userId       String         @db.Uuid
+  documentType String         @db.VarChar(50)
+  documentUrl  String         @db.VarChar(500)
+  status       DocumentStatus @default(PENDING)
+
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([documentType])
+  @@map("profile_documents")
+}
+
+// ── Module 3 Enums ────────────────────────────────────────────
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  UNPUBLISHED
+  ARCHIVED
+}
+
+// ── Category ──────────────────────────────────────────────────
+
+model Category {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique @db.VarChar(100)
+  slug        String   @unique @db.VarChar(120)
+  description String?  @db.VarChar(500)
+
+  // Relations
+  attractions Attraction[]
+  experiences Experience[]
+  activities  Activity[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("categories")
+}
+
+// ── Destination ───────────────────────────────────────────────
+
+model Destination {
+  id               String        @id @default(uuid()) @db.Uuid
+  name             String        @db.VarChar(200)
+  slug             String        @unique @db.VarChar(250)
+  shortDescription String?       @db.VarChar(500)
+  description      String?       @db.Text
+  location         String?       @db.VarChar(255)
+  latitude         Float?
+  longitude        Float?
+  status           ContentStatus @default(DRAFT)
+  isFeatured       Boolean       @default(false)
+
+  // Relations
+  attractions Attraction[]
+  experiences Experience[]
+  activities  Activity[]
+  media       DestinationMedia[]
+  information DestinationInformation[]
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([status])
+  @@index([slug])
+  @@index([isFeatured])
+  @@map("destinations")
+}
+
+// ── Attraction ────────────────────────────────────────────────
+
+model Attraction {
+  id            String        @id @default(uuid()) @db.Uuid
+  destinationId String        @db.Uuid
+  categoryId    String?       @db.Uuid
+  name          String        @db.VarChar(200)
+  description   String?       @db.Text
+  location      String?       @db.VarChar(255)
+  openingTime   String?       @db.VarChar(20)
+  closingTime   String?       @db.VarChar(20)
+  status        ContentStatus @default(DRAFT)
+
+  // Relations
+  destination   Destination   @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  category      Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([destinationId])
+  @@index([categoryId])
+  @@index([status])
+  @@map("attractions")
+}
+
+// ── Experience ────────────────────────────────────────────────
+
+model Experience {
+  id            String        @id @default(uuid()) @db.Uuid
+  destinationId String        @db.Uuid
+  categoryId    String?       @db.Uuid
+  name          String        @db.VarChar(200)
+  description   String?       @db.Text
+  duration      String?       @db.VarChar(50)
+  difficulty    String?       @db.VarChar(50)
+  status        ContentStatus @default(DRAFT)
+
+  // Relations
+  destination   Destination   @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  category      Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([destinationId])
+  @@index([categoryId])
+  @@index([status])
+  @@map("experiences")
+}
+
+// ── Activity ──────────────────────────────────────────────────
+
+model Activity {
+  id            String        @id @default(uuid()) @db.Uuid
+  destinationId String        @db.Uuid
+  categoryId    String?       @db.Uuid
+  name          String        @db.VarChar(200)
+  description   String?       @db.Text
+  duration      String?       @db.VarChar(50)
+  status        ContentStatus @default(DRAFT)
+
+  // Relations
+  destination   Destination   @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  category      Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([destinationId])
+  @@index([categoryId])
+  @@index([status])
+  @@map("activities")
+}
+
+// ── Destination Media ─────────────────────────────────────────
+
+model DestinationMedia {
+  id            String      @id @default(uuid()) @db.Uuid
+  destinationId String      @db.Uuid
+  mediaType     String      @default("IMAGE") @db.VarChar(50)
+  url           String      @db.VarChar(500)
+  caption       String?     @db.VarChar(255)
+  isPrimary     Boolean     @default(false)
+
+  // Relations
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([destinationId])
+  @@map("destination_media")
+}
+
+// ── Destination Information ───────────────────────────────────
+
+model DestinationInformation {
+  id            String      @id @default(uuid()) @db.Uuid
+  destinationId String      @db.Uuid
+  title         String      @db.VarChar(200)
+  content       String      @db.Text
+  infoType      String?     @db.VarChar(50)
+
+  // Relations
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([destinationId])
+  @@map("destination_information")
+}
+
+// ── Module 4 Enums ────────────────────────────────────────────
+
+enum IncidentStatus {
+  REPORTED
+  ACKNOWLEDGED
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+  CANCELLED
+}
+
+enum IncidentPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+// ── Emergency Contact ─────────────────────────────────────────
+
+model EmergencyContact {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(150)
+  phone       String   @db.VarChar(20)
+  category    String   @db.VarChar(100)
+  location    String?  @db.VarChar(255)
+  isAvailable Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("emergency_contacts")
+}
+
+// ── Incident ──────────────────────────────────────────────────
+
+model Incident {
+  id           String           @id @default(uuid()) @db.Uuid
+  reportedById String?          @db.Uuid
+  type         String           @db.VarChar(100)
+  description  String           @db.Text
+  location     String?          @db.VarChar(255)
+  latitude     Float?
+  longitude    Float?
+  priority     IncidentPriority @default(MEDIUM)
+  status       IncidentStatus   @default(REPORTED)
+  assignedToId String?          @db.Uuid
+  resolvedAt   DateTime?
+
+  // Relations
+  reportedBy   User?            @relation("ReportedIncidents", fields: [reportedById], references: [id], onDelete: SetNull)
+  assignedTo   User?            @relation("AssignedIncidents", fields: [assignedToId], references: [id], onDelete: SetNull)
+  updates      IncidentUpdate[]
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([reportedById])
+  @@index([assignedToId])
+  @@index([status])
+  @@index([priority])
+  @@map("incidents")
+}
+
+// ── Incident Update ───────────────────────────────────────────
+
+model IncidentUpdate {
+  id             String          @id @default(uuid()) @db.Uuid
+  incidentId     String          @db.Uuid
+  userId         String?         @db.Uuid
+  notes          String          @db.Text
+  previousStatus IncidentStatus?
+  newStatus      IncidentStatus?
+
+  // Relations
+  incident       Incident        @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  user           User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt      DateTime        @default(now())
+
+  @@index([incidentId])
+  @@index([userId])
+  @@map("incident_updates")
+}
+
+// ── Safety Alert ──────────────────────────────────────────────
+
+model SafetyAlert {
+  id          String        @id @default(uuid()) @db.Uuid
+  title       String        @db.VarChar(200)
+  message     String        @db.Text
+  severity    AlertSeverity @default(INFO)
+  area        String?       @db.VarChar(255)
+  isActive    Boolean       @default(true)
+  issuedById  String?       @db.Uuid
+  expiresAt   DateTime?
+
+  // Relations
+  issuedBy    User?         @relation(fields: [issuedById], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([isActive])
+  @@index([severity])
+  @@index([issuedById])
+  @@map("safety_alerts")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Betla Eco-Companion — Module 5: Eco-Management Models
+// ═══════════════════════════════════════════════════════════════
+
+enum EcoReportStatus {
+  SUBMITTED
+  REVIEWED
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model EcoCategory {
+  id          String      @id @default(uuid()) @db.Uuid
+  name        String      @unique @db.VarChar(100)
+  slug        String      @unique @db.VarChar(120)
+  description String?     @db.VarChar(500)
+  status      String      @default("ACTIVE") @db.VarChar(20)
+
+  reports     EcoReport[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("eco_categories")
+}
+
+model EcoActivity {
+  id           String   @id @default(uuid()) @db.Uuid
+  title        String   @db.VarChar(200)
+  description  String   @db.Text
+  activityDate DateTime
+  location     String?  @db.VarChar(255)
+  organizer    String?  @db.VarChar(150)
+  status       String   @default("ACTIVE") @db.VarChar(20)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("eco_activities")
+}
+
+model EcoReport {
+  id           String           @id @default(uuid()) @db.Uuid
+  reportedById String?          @db.Uuid
+  categoryId   String?          @db.Uuid
+  description  String           @db.Text
+  location     String?          @db.VarChar(255)
+  priority     IncidentPriority @default(MEDIUM)
+  status       EcoReportStatus  @default(SUBMITTED)
+  assignedToId String?          @db.Uuid
+  resolvedAt   DateTime?
+
+  // Relations
+  reportedBy   User?            @relation("ReportedEcoReports", fields: [reportedById], references: [id], onDelete: SetNull)
+  category     EcoCategory?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  assignedTo   User?            @relation("AssignedEcoReports", fields: [assignedToId], references: [id], onDelete: SetNull)
+  updates      EcoUpdate[]
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([reportedById])
+  @@index([assignedToId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([priority])
+  @@map("eco_reports")
+}
+
+model EcoUpdate {
+  id             String           @id @default(uuid()) @db.Uuid
+  ecoReportId    String           @db.Uuid
+  userId         String?          @db.Uuid
+  notes          String           @db.Text
+  previousStatus EcoReportStatus?
+  newStatus      EcoReportStatus?
+
+  // Relations
+  ecoReport      EcoReport        @relation(fields: [ecoReportId], references: [id], onDelete: Cascade)
+  user           User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt      DateTime         @default(now())
+
+  @@index([ecoReportId])
+  @@index([userId])
+  @@map("eco_updates")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Betla Eco-Companion — Module: Booking, Trip & Transaction Models
+// ═══════════════════════════════════════════════════════════════
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum BookingItemType {
+  GUIDE_SERVICE
+  HOMESTAY_ROOM
+}
+
+enum IdProofType {
+  AADHAAR
+  PASSPORT
+  DRIVING_LICENSE
+  VOTER_ID
+}
+
+enum PaymentStatus {
+  INITIATED
+  SUCCESSFUL
+  FAILED
+  REFUNDED
+}
+
+enum CancellationStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum TripStatus {
+  DRAFT
+  UPCOMING
+  ACTIVE
+  COMPLETED
+}
+
+model Booking {
+  id           String        @id @default(uuid()) @db.Uuid
+  userId       String        @db.Uuid
+  referenceNo  String        @unique @db.VarChar(50)
+  status       BookingStatus @default(PENDING)
+  totalAmount  Decimal       @db.Decimal(10, 2)
+  currency     String        @default("INR") @db.VarChar(3)
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  items        BookingItem[]
+  guests       BookingGuest[]
+  payments     PaymentTransaction[]
+  cancellation BookingCancellation?
+  tripItems    TripItem[]
+  reviews      Review[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([referenceNo])
+  @@map("bookings")
+}
+
+model BookingItem {
+  id         String          @id @default(uuid()) @db.Uuid
+  bookingId  String          @db.Uuid
+  itemType   BookingItemType
+  itemId     String          @db.Uuid
+  unitPrice  Decimal         @db.Decimal(10, 2)
+  quantity   Int             @default(1)
+  subtotal   Decimal         @db.Decimal(10, 2)
+
+  booking    Booking         @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+
+  createdAt  DateTime        @default(now())
+
+  @@index([bookingId])
+  @@index([itemId])
+  @@map("booking_items")
+}
+
+model BookingGuest {
+  id            String      @id @default(uuid()) @db.Uuid
+  bookingId     String      @db.Uuid
+  fullName      String      @db.VarChar(150)
+  age           Int
+  idProofType   IdProofType
+  idProofNumber String      @db.VarChar(100)
+
+  booking       Booking     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime    @default(now())
+
+  @@index([bookingId])
+  @@map("booking_guests")
+}
+
+model PaymentTransaction {
+  id                   String        @id @default(uuid()) @db.Uuid
+  bookingId            String        @db.Uuid
+  amount               Decimal       @db.Decimal(10, 2)
+  status               PaymentStatus @default(INITIATED)
+  paymentMethod        String        @db.VarChar(50)
+  gatewayTransactionId String?       @db.VarChar(255)
+
+  booking              Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  createdAt            DateTime      @default(now())
+
+  @@index([bookingId])
+  @@index([status])
+  @@map("payment_transactions")
+}
+
+model BookingCancellation {
+  id           String             @id @default(uuid()) @db.Uuid
+  bookingId    String             @unique @db.Uuid
+  cancelledById String            @db.Uuid
+  reason       String             @db.Text
+  refundAmount Decimal            @default(0) @db.Decimal(10, 2)
+  status       CancellationStatus @default(PENDING)
+
+  booking      Booking            @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  cancelledBy  User               @relation(fields: [cancelledById], references: [id], onDelete: Restrict)
+
+  createdAt    DateTime           @default(now())
+
+  @@index([bookingId])
+  @@index([cancelledById])
+  @@map("booking_cancellations")
+}
+
+model Trip {
+  id        String     @id @default(uuid()) @db.Uuid
+  userId    String     @db.Uuid
+  title     String     @db.VarChar(200)
+  startDate DateTime
+  endDate   DateTime
+  status    TripStatus @default(DRAFT)
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     TripItem[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("trips")
+}
+
+model TripItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  tripId    String   @db.Uuid
+  bookingId String?  @db.Uuid
+  itemType  String   @db.VarChar(50)
+  itemId    String   @db.Uuid
+  notes     String?  @db.Text
+
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([tripId])
+  @@index([bookingId])
+  @@map("trip_items")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Betla Eco-Companion — Module 6: Communication, Notifications & Reviews
+// ═══════════════════════════════════════════════════════════════
+
+enum NotificationType {
+  BOOKING_CREATED
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  BOOKING_COMPLETED
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  REFUND_COMPLETED
+  TRIP_REMINDER
+  GUIDE_VERIFICATION
+  HOMESTAY_VERIFICATION
+  REVIEW_REMINDER
+  SYSTEM_ALERT
+}
+
+enum NotificationChannel {
+  IN_APP
+  PUSH
+  EMAIL
+  SMS
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum ReviewTargetType {
+  GUIDE_SERVICE
+  HOMESTAY_PROPERTY
+}
+
+enum ReviewStatus {
+  PENDING
+  PUBLISHED
+  HIDDEN
+  REJECTED
+}
+
+model Notification {
+  id        String              @id @default(uuid()) @db.Uuid
+  userId    String              @db.Uuid
+  type      NotificationType
+  title     String              @db.VarChar(200)
+  message   String              @db.Text
+  data      Json?
+  channel   NotificationChannel @default(IN_APP)
+  status    NotificationStatus  @default(PENDING)
+  readAt    DateTime?
+  sentAt    DateTime?
+
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @unique @db.Uuid
+  inAppEnabled  Boolean  @default(true)
+  pushEnabled   Boolean  @default(true)
+  emailEnabled  Boolean  @default(true)
+  smsEnabled    Boolean  @default(true)
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("notification_preferences")
+}
+
+model Review {
+  id          String           @id @default(uuid()) @db.Uuid
+  userId      String           @db.Uuid
+  bookingId   String           @db.Uuid
+  targetType  ReviewTargetType
+  targetId    String           @db.Uuid
+  rating      Int
+  title       String?          @db.VarChar(200)
+  comment     String           @db.Text
+  status      ReviewStatus     @default(PUBLISHED)
+  publishedAt DateTime?        @default(now())
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking     Booking          @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  response    ReviewResponse?
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([userId, bookingId, targetType, targetId])
+  @@index([userId])
+  @@index([bookingId])
+  @@index([targetId])
+  @@index([status])
+  @@map("reviews")
+}
+
+model ReviewResponse {
+  id           String   @id @default(uuid()) @db.Uuid
+  reviewId     String   @unique @db.Uuid
+  responderId  String   @db.Uuid
+  responseText String   @db.Text
+
+  review       Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  responder    User     @relation(fields: [responderId], references: [id], onDelete: Restrict)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([reviewId])
+  @@index([responderId])
+  @@map("review_responses")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Betla Eco-Companion — Module 8: Administration & Governance
+// ═══════════════════════════════════════════════════════════════
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String?  @db.Uuid @map("user_id")
+  action     String   @db.VarChar(100)
+  module     String   @db.VarChar(50)
+  entityType String   @db.VarChar(50) @map("entity_type")
+  entityId   String?  @db.VarChar(100) @map("entity_id")
+  oldValue   Json?    @map("old_value")
+  newValue   Json?    @map("new_value")
+  ipAddress  String?  @db.VarChar(45) @map("ip_address")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([module])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model SystemSetting {
+  id          String   @id @default(uuid()) @db.Uuid
+  key         String   @unique @db.VarChar(100)
+  value       Json
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([key])
+  @@map("system_settings")
+}
+
+
+
+
+
+
+
