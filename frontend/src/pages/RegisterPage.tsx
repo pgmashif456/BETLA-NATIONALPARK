@@ -81,7 +81,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      const result = await register({
+      await register({
         email: form.email,
         password: form.password,
         firstName: form.firstName,
@@ -90,14 +90,8 @@ export default function RegisterPage() {
         role: form.role,
       });
 
-      // In dev mode, auto-navigate with token directly to verification without stale toast
-      if (result.verificationToken) {
-        toast.dismiss();
-        navigate(`/verify?token=${result.verificationToken}`);
-      } else {
-        toast.success('Account created! Please check your email to verify.');
-        navigate('/verify');
-      }
+      toast.success('Welcome to Betla Eco-Companion!');
+      navigate('/dashboard', { replace: true });
     } catch (err: any) {
       const msg = err.response?.data?.error?.message || 'Registration failed';
       toast.error(msg);

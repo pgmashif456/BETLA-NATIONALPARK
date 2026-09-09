@@ -43,7 +43,10 @@ export class AuthService {
   //  REGISTRATION
   // ══════════════════════════════════════════════════════════════
 
-  async register(input: RegisterInput): Promise<{ user: UserResponse; verificationToken: string }> {
+  async register(
+    input: RegisterInput,
+    meta: { userAgent?: string; ipAddress?: string } = {}
+  ): Promise<AuthResponse> {
     // Check if email already exists
     const existingUser = await this.repo.findUserByEmail(input.email);
     if (existingUser) {
@@ -67,7 +70,7 @@ export class AuthService {
     // Hash password
     const passwordHash = await this.hashPassword(input.password);
 
-    // Create user
+    // Create user with ACTIVE status and email verified
     const user = await this.repo.createUser({
       email: input.email,
       passwordHash,
@@ -75,27 +78,19 @@ export class AuthService {
       lastName: input.lastName,
       phone: input.phone,
       roleId: role.id,
+      status: UserStatus.ACTIVE,
+      emailVerified: true,
     });
 
-    // Create verification token
-    const verificationToken = this.generateRandomToken();
-    const tokenHash = this.hashToken(verificationToken);
-
-    await this.repo.createVerificationToken({
-      userId: user.id,
-      tokenHash,
-      type: VerificationTokenType.EMAIL_VERIFICATION,
-      expiresAt: new Date(Date.now() + VERIFICATION_TOKEN_EXPIRY_HOURS * 60 * 60 * 1000),
-    });
+    // Generate tokens for immediate login
+    const permissions = user.role.rolePermissions.map((rp) => rp.permission.name);
+    const tokens = await this.generateTokens(user.id, user.email, user.role.name, permissions, meta);
 
     logger.info('User registered successfully', { userId: user.id, email: input.email });
 
-    // Log verification token for development (in production, this would be sent via email)
-    logger.info(`[DEV] Email verification token for ${input.email}: ${verificationToken}`);
-
     return {
       user: this.formatUserResponse(user),
-      verificationToken,
+      tokens,
     };
   }
 

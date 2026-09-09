@@ -30,7 +30,7 @@ interface AuthContextType extends AuthState {
     lastName: string;
     phone?: string;
     role: string;
-  }) => Promise<{ verificationToken?: string }>;
+  }) => Promise<any>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -99,7 +99,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     role: string;
   }) => {
     const response = await authApi.register(data);
-    return { verificationToken: response.data.data.verificationToken };
+    const { user, tokens } = response.data.data;
+
+    if (tokens) {
+      localStorage.setItem('accessToken', tokens.accessToken);
+      localStorage.setItem('refreshToken', tokens.refreshToken);
+
+      setState({
+        user,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    }
+
+    return response.data.data;
   };
 
   const logout = async () => {

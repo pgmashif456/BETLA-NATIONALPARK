@@ -66,9 +66,15 @@ export class AuthRepository {
     lastName: string;
     phone?: string;
     roleId: string;
+    status?: UserStatus;
+    emailVerified?: boolean;
   }) {
     return this.db.user.create({
-      data,
+      data: {
+        status: data.status ?? UserStatus.ACTIVE,
+        emailVerified: data.emailVerified ?? true,
+        ...data,
+      },
       include: {
         role: {
           include: {

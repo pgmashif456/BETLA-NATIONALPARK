@@ -41,14 +41,12 @@ export class AuthController {
   register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const input = validate(registerSchema, req.body);
-      const result = await this.service.register(input);
+      const result = await this.service.register(input, {
+        userAgent: req.get('user-agent'),
+        ipAddress: req.ip,
+      });
 
-      sendSuccess(res, {
-        user: result.user,
-        message: 'Registration successful. Please verify your email.',
-        // Include token in dev/test mode for easy testing
-        ...(['development', 'test'].includes(process.env.NODE_ENV as string) && { verificationToken: result.verificationToken }),
-      }, 201);
+      sendSuccess(res, result, 201);
     } catch (error) {
       next(error);
     }
