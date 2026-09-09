@@ -28,9 +28,28 @@ const app = express();
 app.use(helmet());
 
 // ── CORS ────────────────────────────────────────────────────
+const rawCorsOrigin = config.cors.origin || '';
+const allowedOrigins = rawCorsOrigin
+  .split(',')
+  .map((o) => o.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: config.cors.origin,
+    origin: (origin, callback) => {
+      // Allow server-to-server or tools without origin header
+      if (!origin) return callback(null, true);
+
+      const normalizedOrigin = origin.replace(/\/$/, '');
+      if (
+        allowedOrigins.includes(normalizedOrigin) ||
+        allowedOrigins.includes('*') ||
+        (config.nodeEnv !== 'production' && normalizedOrigin.includes('localhost'))
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id'],

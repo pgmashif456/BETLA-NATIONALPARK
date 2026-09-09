@@ -359,7 +359,7 @@ export const AdminPage: React.FC = () => {
   return (
     <div className="sample1-app-container" style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc' }}>
       {/* 220px Deep Forest-Green Sidebar */}
-      <aside className="sample1-sidebar" style={{ width: 220, minWidth: 220, backgroundColor: '#091a10', color: '#ffffff', display: 'flex', flexDirection: 'column', padding: '18px 0', zIndex: 50, borderRight: '1px solid rgba(255,255,255,0.05)' }}>
+      <aside className="sample1-sidebar" style={{ backgroundColor: '#091a10', color: '#ffffff', display: 'flex', flexDirection: 'column', padding: '18px 0', zIndex: 50, borderRight: '1px solid rgba(255,255,255,0.05)' }}>
         {/* Brand Header */}
         <div style={{ padding: '0 18px 18px', display: 'flex', alignItems: 'center', gap: 10, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ width: 34, height: 34, borderRadius: 8, backgroundColor: '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', flexShrink: 0 }}>
@@ -372,7 +372,7 @@ export const AdminPage: React.FC = () => {
         </div>
 
         {/* Navigation Items */}
-        <nav style={{ flex: 1, padding: '14px 10px', display: 'flex', flexDirection: 'column', gap: 4, overflowY: 'auto' }}>
+        <nav className="sample1-nav-group" style={{ flex: 1, padding: '14px 10px', gap: 4, overflowY: 'auto' }}>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (

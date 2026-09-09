@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Betla Eco-Companion — Sample-1 Compact Visual Polish
+   Betla Eco-Companion - Sample-1 Compact Visual Polish + Mobile Responsiveness
    Compact proportions, Tiger Forest Hero Banner, Refined Typography
    ========================================================================== */
 
@@ -47,7 +47,9 @@
   padding: 0;
 }
 
-html {
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
 }
@@ -73,27 +75,41 @@ a {
 }
 
 /* Layout */
-.sample1-layout {
+.sample1-layout, .sample1-app-container {
   display: flex;
   min-height: 100vh;
+  width: 100%;
   background: var(--bg-base);
+  position: relative;
 }
 
-/* Compact Left Sidebar (220px) */
+/* Left Sidebar - Base */
 .sample1-sidebar {
-  width: var(--sidebar-width);
-  min-width: var(--sidebar-width);
   background: var(--sidebar-bg);
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 14px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  z-index: 100;
-  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Desktop Sidebar (Pinned Full-Height Viewport) */
+@media (min-width: 769px) {
+  .sample1-sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+    justify-content: space-between;
+    padding: 20px 14px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    z-index: 100;
+    overflow-y: auto;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
 }
 
 .sample1-brand {
@@ -186,6 +202,8 @@ a {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Header */
@@ -200,6 +218,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 90;
+  width: 100%;
 }
 
 .sample1-search-box {
@@ -211,6 +230,7 @@ a {
   border-radius: var(--radius-full);
   padding: 6px 16px;
   width: 360px;
+  max-width: 360px;
 }
 
 .sample1-search-input {
@@ -226,6 +246,7 @@ a {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-shrink: 0;
 }
 
 .sample1-icon-btn {
@@ -235,6 +256,9 @@ a {
   position: relative;
   font-size: 1rem;
   color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sample1-user-pill {
@@ -248,25 +272,27 @@ a {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--color-primary);
-  color: white;
+  background: #d1fae5;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: 0.82rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 0.82rem;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
 }
 
 .sample1-user-info {
   display: flex;
   flex-direction: column;
-  line-height: 1.15;
 }
 
 .sample1-user-name {
-  font-size: 0.82rem;
   font-weight: 600;
+  font-size: 0.78rem;
   color: var(--text-primary);
+  line-height: 1.2;
 }
 
 .sample1-user-role {
@@ -280,6 +306,7 @@ a {
   flex: 1;
   max-width: 1340px;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Tiger Forest Banner Hero (Sample-1 1:1 Match) */
@@ -343,7 +370,6 @@ a {
   cursor: pointer;
   transition: all 0.15s ease;
 }
-
 
 .sample1-btn-secondary {
   display: inline-flex;
@@ -630,7 +656,10 @@ a {
   color: var(--text-muted);
 }
 
-/* Responsive */
+/* ==========================================================================
+   Responsive Breakpoints: Desktop (1025px+) | Tablet (481-1024px) | Mobile (320-480px)
+   ========================================================================== */
+
 @media (max-width: 1024px) {
   .sample1-content-grid {
     grid-template-columns: 1fr;
@@ -638,27 +667,194 @@ a {
   .sample1-quick-actions {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-@media (max-width: 768px) {
-  .sample1-layout {
-    flex-direction: column;
-  }
-  .sample1-sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-  .sample1-header {
-    padding: 0 14px;
-  }
-  .sample1-search-box {
-    width: 180px;
+  .sample1-dest-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
   .sample1-hero-quote {
     display: none;
   }
-  .sample1-quick-actions {
-    grid-template-columns: 1fr;
+}
+
+@media (max-width: 768px) {
+  .sample1-layout, .sample1-app-container {
+    flex-direction: column !important;
+    width: 100% !important;
+    min-height: 100vh !important;
   }
+
+  /* Compact Mobile Sidebar: Brand on top + Horizontal Swipeable Nav Bar */
+  .sample1-sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    position: relative !important;
+    padding: 10px 14px 8px !important;
+    overflow-y: visible !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-self: stretch !important;
+    gap: 8px !important;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .sample1-brand {
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .sample1-brand-sub {
+    display: none;
+  }
+
+  .sample1-nav-group {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 6px !important;
+    padding: 4px 2px !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .sample1-nav-group::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sample1-nav-item {
+    padding: 7px 12px !important;
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    border-radius: var(--radius-full) !important;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .sample1-nav-item:hover {
+    background: var(--sidebar-bg-hover);
+  }
+
+  .sample1-nav-item.active {
+    border-left: none !important;
+    background: var(--sidebar-active-bg) !important;
+    border: 1px solid rgba(16, 185, 129, 0.5) !important;
+  }
+
+  .sample1-sidebar-footer {
+    display: none !important;
+  }
+
+  /* Main Container */
+  .sample1-container {
+    padding: 14px 12px 24px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Header */
+  .sample1-header {
+    height: auto !important;
+    min-height: 52px !important;
+    padding: 8px 12px !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .sample1-search-box {
+    width: auto !important;
+    flex: 1 !important;
+    min-width: 80px !important;
+    max-width: 240px !important;
+    padding: 5px 12px !important;
+  }
+
+  .sample1-search-input {
+    font-size: 0.78rem !important;
+  }
+
+  .sample1-user-controls {
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sample1-user-name, .sample1-user-role {
+    display: none !important;
+  }
+
+  /* Hero Banner */
+  .sample1-hero {
+    min-height: auto !important;
+    padding: 18px 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .sample1-hero-title {
+    font-size: 1.35rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .sample1-hero-sub {
+    font-size: 0.78rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Grids & Cards */
+  .sample1-quick-actions {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .sample1-dest-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .sample1-footer {
+    flex-direction: column !important;
+    gap: 8px !important;
+    text-align: center !important;
+    padding-top: 16px !important;
+    margin-top: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .sample1-quick-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sample1-dest-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sample1-dest-img {
+    height: 120px !important;
+  }
+
+  .sample1-weather-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 4px !important;
+  }
+
+  .sample1-hero {
+    padding: 14px 12px !important;
+  }
+
+  .sample1-hero-title {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* Utilities for responsive tables & scroll containers */
+.table-responsive-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }

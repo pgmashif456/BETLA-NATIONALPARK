@@ -485,7 +485,7 @@ export default function ProfilePage() {
           {/* Main 2-Column Grid */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: '20px'
           }}>
             {/* Left Column: Stakeholder Profile Card */}
