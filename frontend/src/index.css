@@ -323,14 +323,18 @@ a {
   min-height: 220px;
   display: flex;
   align-items: center;
-  padding: 28px 36px;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 28px 36px 36px 36px;
   box-shadow: var(--shadow-sm);
 }
 
 .sample1-hero-content {
   position: relative;
   z-index: 2;
-  max-width: 540px;
+  flex: 1;
+  min-width: 0;
+  max-width: 520px;
 }
 
 .sample1-hero-tag {
@@ -407,17 +411,19 @@ a {
 }
 
 .sample1-hero-quote {
-  position: absolute;
-  right: 36px;
-  top: 50%;
-  transform: translateY(-50%);
-  max-width: 250px;
+  position: relative;
+  right: auto;
+  top: auto;
+  transform: none;
+  flex-shrink: 0;
+  max-width: 240px;
+  width: 100%;
   font-style: italic;
   font-size: 0.8rem;
   color: #f3f4f6;
   line-height: 1.45;
   border-left: 2px solid var(--color-primary);
-  padding-left: 12px;
+  padding-left: 14px;
   z-index: 2;
 }
 
@@ -858,4 +864,155 @@ a {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Master Image-Background Weather Card */
+.sample1-weather-card {
+  position: relative;
+  background-image: linear-gradient(135deg, rgba(13, 35, 23, 0.82) 0%, rgba(9, 26, 16, 0.90) 100%), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80');
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  color: #ffffff;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sample1-weather-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.sample1-weather-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.sample1-weather-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.sample1-weather-date {
+  font-size: 0.72rem;
+  color: #a7f3d0;
+  font-weight: 500;
+}
+
+.sample1-weather-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.sample1-weather-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sample1-weather-temp {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.sample1-weather-condition {
+  font-size: 0.78rem;
+  color: #6ee7b7;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.sample1-weather-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  z-index: 1;
+}
+
+.sample1-weather-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: #e5e7eb;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sample1-weather-stat-label {
+  color: #9ca3af;
+}
+
+.sample1-weather-stat-val {
+  color: #ffffff;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+/* Hero Carousel Dots */
+.sample1-hero-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 2;
+}
+
+.sample1-hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sample1-hero-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.sample1-hero-dot.active {
+  background: #10b981;
+  border-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  transform: scale(1.25);
 }

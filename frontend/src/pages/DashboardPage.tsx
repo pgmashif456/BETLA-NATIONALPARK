@@ -3,15 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
 import { authApi } from '../api/client';
+import heroImgAsset from '../assets/hero.png';
 
-// Clean SVG Icons matching Sample-1 visual system
-const IconLeaf = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-  </svg>
-);
-
+// Clean inline SVG Icons matching Sample-1 visual language
 const IconHome = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -74,13 +68,6 @@ const IconBarChart = () => (
   </svg>
 );
 
-const IconSearch = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8"/>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-  </svg>
-);
-
 const IconBell = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -89,20 +76,20 @@ const IconBell = () => (
 );
 
 const IconZap = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
   </svg>
 );
 
 const IconMail = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect width="20" height="16" x="2" y="4" rx="2"/>
     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
   </svg>
 );
 
 const IconKey = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="7.5" cy="15.5" r="5.5"/>
     <path d="m21 2-9.6 9.6"/>
     <path d="m15.5 7.5 3 3"/>
@@ -110,7 +97,7 @@ const IconKey = () => (
 );
 
 const IconCalendar = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
     <line x1="16" y1="2" x2="16" y2="6"/>
     <line x1="8" y1="2" x2="8" y2="6"/>
@@ -140,6 +127,13 @@ const IconLogOut = () => (
   </svg>
 );
 
+const IconLeaf = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+  </svg>
+);
+
 export default function DashboardPage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -148,11 +142,11 @@ export default function DashboardPage() {
   const [changePwLoading, setChangePwLoading] = useState(false);
 
   const roleEmoji: Record<string, string> = {
-    TOURIST: '🌴',
-    GUIDE: '🧭',
+    TOURIST: '🧭',
+    GUIDE: '🦺',
     HOMESTAY: '🏡',
-    ADMIN: '🛡️',
-    FOREST_AUTHORITY: '🚓',
+    ADMIN: '⚡',
+    FOREST_AUTHORITY: '🌲',
   };
 
   const roleBadgeColor: Record<string, { bg: string; color: string; border: string }> = {
@@ -191,6 +185,10 @@ export default function DashboardPage() {
 
   const roleName = user.role.name;
   const badgeStyle = roleBadgeColor[roleName] || { bg: '#f3f4f6', color: '#374151', border: '#e5e7eb' };
+
+  const heroBackgroundStyle = {
+    backgroundImage: `linear-gradient(to right, rgba(9, 26, 16, 0.92) 0%, rgba(9, 26, 16, 0.65) 55%, rgba(9, 26, 16, 0.3) 100%), url(${heroImgAsset})`,
+  };
 
   return (
     <div className="sample1-layout">
@@ -251,6 +249,7 @@ export default function DashboardPage() {
           <div className="sample1-user-controls">
             <button className="sample1-icon-btn" title="Notifications" onClick={() => navigate('/safety-hub')}>
               <IconBell />
+              <span style={{ position: 'absolute', top: 0, right: 0, width: 7, height: 7, background: '#ef4444', borderRadius: '50%' }}></span>
             </button>
 
             <div className="sample1-user-pill" onClick={() => navigate('/profile')}>
@@ -269,260 +268,410 @@ export default function DashboardPage() {
                   color: '#6b7280',
                   cursor: 'pointer',
                   fontSize: '0.78rem',
-                  marginLeft: '6px',
+                  marginLeft: '8px',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '4px'
+                  gap: '4px',
+                  padding: '4px 6px',
+                  borderRadius: '4px',
+                  transition: 'color 0.15s ease'
                 }}
+                title="Logout"
               >
-                <IconLogOut /> Logout
+                <IconLogOut /> <span className="sample1-logout-text">Logout</span>
               </button>
             </div>
           </div>
         </header>
 
         <div className="sample1-container">
-          {/* Welcome Card Header */}
-          <div style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: '12px',
-            padding: '20px 24px',
-            marginBottom: '20px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}>
+          {/* Sample-1 Tiger Forest Hero Banner */}
+          <div className="sample1-hero" style={heroBackgroundStyle}>
+            <div className="sample1-hero-content">
+              <div className="sample1-hero-tag">
+                {roleEmoji[roleName]} {roleName.replace('_', ' ')} PORTAL • COMMAND CENTER
+              </div>
+              <h1 className="sample1-hero-title">Welcome back, {user.firstName}!</h1>
+              <div className="sample1-hero-sub">Explore Betla & Palamau Tiger Reserve through your personal dashboard</div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
+                <button className="sample1-hero-btn" onClick={() => navigate('/discover')}>
+                  Explore Betla Park →
+                </button>
+                <button
+                  className="sample1-btn-secondary"
+                  style={{ background: 'rgba(255, 255, 255, 0.15)', color: '#ffffff', borderColor: 'rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(4px)' }}
+                  onClick={() => navigate('/profile')}
+                >
+                  <IconUser /> Profile Command Center
+                </button>
+              </div>
+            </div>
+            <div className="sample1-hero-quote">
+              "In every walk with nature one receives far more than he seeks."
+              <div style={{ marginTop: '4px', fontSize: '0.72rem', color: '#6ee7b7' }}>— John Muir</div>
+            </div>
+          </div>
+
+          {/* Quick Stats Row (Sample-1 Quick Action Cards Pattern) */}
+          <div className="sample1-quick-actions">
+            <div className="sample1-quick-card green">
+              <div className="sample1-quick-card-icon"><IconZap /></div>
+              <div>
+                <div className="sample1-quick-card-title">{user.status}</div>
+                <div className="sample1-quick-card-sub">Account Status</div>
+              </div>
+            </div>
+
+            <div className="sample1-quick-card blue">
+              <div className="sample1-quick-card-icon"><IconMail /></div>
+              <div>
+                <div className="sample1-quick-card-title">{user.emailVerified ? 'Verified ✓' : 'Pending ⏳'}</div>
+                <div className="sample1-quick-card-sub">Email Verification</div>
+              </div>
+            </div>
+
+            <div className="sample1-quick-card amber">
+              <div className="sample1-quick-card-icon"><IconKey /></div>
+              <div>
+                <div className="sample1-quick-card-title">{user.permissions.length} Active</div>
+                <div className="sample1-quick-card-sub">Authorized Permissions</div>
+              </div>
+            </div>
+
+            <div className="sample1-quick-card red">
+              <div className="sample1-quick-card-icon"><IconCalendar /></div>
+              <div>
+                <div className="sample1-quick-card-title">
+                  {new Date(user.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
+                </div>
+                <div className="sample1-quick-card-sub">Member Since</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main 2-Column Content Grid */}
+          <div className="sample1-content-grid">
+            {/* Left Primary Column */}
             <div>
-              <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', margin: '0 0 4px 0' }}>
-                Welcome back, {user.firstName}! 👋
-              </h1>
-              <p style={{ color: '#4b5563', fontSize: '0.88rem', margin: 0 }}>
-                Explore Betla & Palamau Tiger Reserve through your {roleName.replace('_', ' ')} dashboard.
-              </p>
-            </div>
-            <div style={{
-              background: badgeStyle.bg,
-              color: badgeStyle.color,
-              border: `1px solid ${badgeStyle.border}`,
-              padding: '6px 14px',
-              borderRadius: '20px',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              letterSpacing: '0.03em',
-              textTransform: 'uppercase'
-            }}>
-              {roleName.replace('_', ' ')}
-            </div>
-          </div>
-
-          {/* Statistics Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '16px',
-            marginBottom: '20px'
-          }}>
-            <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '18px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: '#e6f4ea', color: '#15803d', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <IconZap />
+              {/* Primary Action Console Card */}
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px',
+                padding: '22px 24px',
+                marginBottom: '20px',
+                boxShadow: 'var(--shadow-sm)'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      background: badgeStyle.bg,
+                      color: badgeStyle.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 700,
+                      fontSize: '1rem'
+                    }}>
+                      {roleEmoji[roleName]}
+                    </div>
+                    <div>
+                      <h2 style={{ fontSize: '1.15rem', margin: 0, fontWeight: 700, color: '#111827', fontFamily: 'var(--font-heading, sans-serif)' }}>
+                        {roleName.replace('_', ' ')} Command Console
+                      </h2>
+                      <p style={{ margin: 0, fontSize: '0.78rem', color: '#6b7280' }}>Authorized role-specific operations</p>
+                    </div>
+                  </div>
+                  <span style={{
+                    padding: '3px 10px',
+                    borderRadius: '999px',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.04em',
+                    background: badgeStyle.bg,
+                    color: badgeStyle.color,
+                    border: `1px solid ${badgeStyle.border}`
+                  }}>
+                    {roleName}
+                  </span>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: '#6b7280', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Account Status</div>
-              </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: user.status === 'ACTIVE' ? '#10b981' : '#f59e0b' }}>
-                {user.status}
-              </div>
-            </div>
 
-            <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '18px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: user.emailVerified ? '#e6f4ea' : '#fee2e2', color: user.emailVerified ? '#15803d' : '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <IconMail />
+                <div style={{ marginTop: '16px' }}>
+                  {roleName === 'ADMIN' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <p style={{ fontSize: '0.85rem', color: '#374151', margin: 0 }}>
+                        You have full administrative privileges across the Betla eco-platform. Manage accounts, oversee wild safaris, and inspect activity logs.
+                      </p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button className="sample1-hero-btn" onClick={() => navigate('/admin')}>
+                          Go to Admin Center →
+                        </button>
+                        <button className="sample1-btn-secondary" onClick={() => navigate('/reviews-hub')}>
+                          Platform Reports
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {roleName === 'TOURIST' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <p style={{ fontSize: '0.85rem', color: '#374151', margin: 0 }}>
+                        Welcome to Betla National Park! Book safari experiences, find certified eco-guides, check live weather advisories, and explore scenic flora/fauna spots.
+                      </p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button className="sample1-hero-btn" onClick={() => navigate('/experiences')}>
+                          Book Safari Experience
+                        </button>
+                        <button className="sample1-btn-secondary" onClick={() => navigate('/guides-stays')}>
+                          Certified Guides & Homestays
+                        </button>
+                        <button className="sample1-btn-secondary" onClick={() => navigate('/safety-hub')}>
+                          Safety & Alerts
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {roleName === 'FOREST_AUTHORITY' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <p style={{ fontSize: '0.85rem', color: '#374151', margin: 0 }}>
+                        Forest Department portal: monitor wildlife zones, review visitor alerts, maintain emergency logs, and oversee reserve conservation rules.
+                      </p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button className="sample1-hero-btn" onClick={() => navigate('/safety-hub')}>
+                          Incident Management
+                        </button>
+                        <button className="sample1-btn-secondary" onClick={() => navigate('/eco-portal')}>
+                          Eco Conservation
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {roleName === 'GUIDE' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <p style={{ fontSize: '0.85rem', color: '#374151', margin: 0 }}>
+                        Certified Guide operations: manage your tourist safari bookings, respond to tourist itineraries, and update your guide availability.
+                      </p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button className="sample1-hero-btn" onClick={() => navigate('/guides-stays')}>
+                          Manage Guide Profile
+                        </button>
+                        <button className="sample1-btn-secondary" onClick={() => navigate('/experiences')}>
+                          Safari Schedules
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {roleName === 'HOMESTAY' && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <p style={{ fontSize: '0.85rem', color: '#374151', margin: 0 }}>
+                        Eco-Homestay management: view upcoming guest reservations, room availability, and guest satisfaction ratings.
+                      </p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button className="sample1-hero-btn" onClick={() => navigate('/guides-stays')}>
+                          Homestay Listings
+                        </button>
+                        <button className="sample1-btn-secondary" onClick={() => navigate('/reviews-hub')}>
+                          Guest Reviews
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div style={{ fontSize: '0.72rem', color: '#6b7280', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Verified</div>
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: user.emailVerified ? '#10b981' : '#ef4444' }}>
-                {user.emailVerified ? 'Yes ✓' : 'No ✕'}
-              </div>
-            </div>
 
-            <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '18px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: '#e8f0fe', color: '#1a73e8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <IconKey />
+              {/* Account Details & Security Card */}
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px',
+                padding: '22px 24px',
+                boxShadow: 'var(--shadow-sm)'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <h2 style={{ fontSize: '1.15rem', margin: 0, fontWeight: 700, color: '#111827', fontFamily: 'var(--font-heading, sans-serif)' }}>
+                    Account Details
+                  </h2>
+                  <span style={{ fontSize: '0.75rem', color: '#15803d', fontWeight: 600 }}>Active Member</span>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: '#6b7280', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Permissions</div>
-              </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827' }}>
-                {user.permissions.length}
-              </div>
-            </div>
 
-            <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '18px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: '#fef7e0', color: '#b06000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <IconCalendar />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '12px' }}>
+                  <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px', letterSpacing: '0.04em' }}>Full Name</div>
+                    <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem' }}>{user.firstName} {user.lastName}</div>
+                  </div>
+                  <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px', letterSpacing: '0.04em' }}>Email Address</div>
+                    <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem', wordBreak: 'break-all' }}>{user.email}</div>
+                  </div>
+                  <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px', letterSpacing: '0.04em' }}>Phone Contact</div>
+                    <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem' }}>{user.phone || '—'}</div>
+                  </div>
+                  <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px', letterSpacing: '0.04em' }}>Assigned Role</div>
+                    <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.9rem' }}>{roleEmoji[user.role.name]} {user.role.name.replace('_', ' ')}</div>
+                  </div>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: '#6b7280', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Member Since</div>
-              </div>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#111827' }}>
-                {new Date(user.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
-              </div>
-            </div>
-          </div>
 
-          {/* Action Console */}
-          <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <span style={{ fontSize: '1.5rem' }}>{roleEmoji[roleName] || '📋'}</span>
-              <h2 style={{ fontSize: '1.25rem', color: '#111827', margin: 0, fontWeight: 700 }}>
-                {roleName.replace('_', ' ')} Primary Action Console
-              </h2>
-            </div>
-            <p style={{ color: '#4b5563', fontSize: '0.88rem', marginBottom: '18px', marginTop: '4px' }}>
-              Quick access navigation to your authorized role features and operations.
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-              {roleName === 'ADMIN' && (
-                <>
-                  <button className="sample1-hero-btn" onClick={() => navigate('/admin')}>
-                    <IconKey /> Open Admin Control Center
+                <div style={{ marginTop: '18px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                  <button className="sample1-hero-btn" onClick={() => navigate('/profile')}>
+                    <IconUser /> Profile Command Center
                   </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/admin')}>
-                    <IconSearch /> System Audit Logs & Users
+                  <button className="sample1-btn-secondary" onClick={() => setShowChangePassword(!showChangePassword)}>
+                    <IconLock /> {showChangePassword ? 'Cancel' : 'Change Password'}
                   </button>
-                </>
-              )}
-
-              {roleName === 'TOURIST' && (
-                <>
-                  <button className="sample1-hero-btn" onClick={() => navigate('/experiences')}>
-                    <IconCompass /> Browse Available Safaris
-                  </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/experiences')}>
-                    <IconCar /> View My Permits
-                  </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/safety-hub')}>
-                    <IconShield /> Emergency & Safety Hub
-                  </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/reviews-hub')}>
-                    <IconBarChart /> Traveler Reviews
-                  </button>
-                </>
-              )}
-
-              {roleName === 'FOREST_AUTHORITY' && (
-                <>
-                  <button className="sample1-hero-btn" onClick={() => navigate('/safety-hub')}>
-                    <IconShield /> Launch Patrol Console
-                  </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/eco-portal')}>
-                    <IconTrees /> Forest Conservation Portal
-                  </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/admin')}>
-                    <IconBarChart /> Governance Analytics Overview
-                  </button>
-                </>
-              )}
-
-              {roleName === 'GUIDE' && (
-                <>
-                  <button className="sample1-hero-btn" onClick={() => navigate('/guides-stays')}>
-                    <IconCompass /> Check Today's Assignments
-                  </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/profile')}>
-                    <IconUser /> Guide Credentials & Verification
-                  </button>
-                </>
-              )}
-
-              {roleName === 'HOMESTAY' && (
-                <>
-                  <button className="sample1-hero-btn" onClick={() => navigate('/guides-stays')}>
-                    <IconBed /> Manage Homestay & Stays
-                  </button>
-                  <button className="sample1-btn-secondary" onClick={() => navigate('/profile')}>
-                    <IconUser /> Homestay Credentials & Verification
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Account Details */}
-          <div style={{ background: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '24px', marginBottom: '20px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-            <h2 style={{ fontSize: '1.2rem', margin: '0 0 16px 0', fontWeight: 700, color: '#111827' }}>Account Details</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-              <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px' }}>Full Name</div>
-                <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.92rem' }}>{user.firstName} {user.lastName}</div>
-              </div>
-              <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px' }}>Email</div>
-                <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.92rem', wordBreak: 'break-all' }}>{user.email}</div>
-              </div>
-              <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px' }}>Phone</div>
-                <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.92rem' }}>{user.phone || '-'}</div>
-              </div>
-              <div style={{ background: '#f9fafb', padding: '12px 14px', borderRadius: '8px', border: '1px solid #f3f4f6' }}>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', marginBottom: '2px' }}>Role</div>
-                <div style={{ fontWeight: 700, color: '#111827', fontSize: '0.92rem' }}>{roleEmoji[user.role.name]} {user.role.name.replace('_', ' ')}</div>
-              </div>
-            </div>
-
-            <div style={{ marginTop: '20px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <button className="sample1-hero-btn" onClick={() => navigate('/profile')}>
-                <IconUser /> Profile Command Center
-              </button>
-              <button className="sample1-btn-secondary" onClick={() => setShowChangePassword(!showChangePassword)}>
-                <IconLock /> {showChangePassword ? 'Cancel' : 'Change Password'}
-              </button>
-            </div>
-
-            {showChangePassword && (
-              <form onSubmit={handleChangePassword} style={{ marginTop: '20px', maxWidth: '400px', background: '#f9fafb', padding: '20px', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
-                <div className="form-group" style={{ marginBottom: '12px' }}>
-                  <label className="form-label">Current Password</label>
-                  <input
-                    type="password"
-                    className="form-input"
-                    value={changePw.currentPassword}
-                    onChange={(e) => setChangePw({ ...changePw, currentPassword: e.target.value })}
-                  />
                 </div>
-                <div className="form-group" style={{ marginBottom: '12px' }}>
-                  <label className="form-label">New Password</label>
-                  <input
-                    type="password"
-                    className="form-input"
-                    value={changePw.newPassword}
-                    onChange={(e) => setChangePw({ ...changePw, newPassword: e.target.value })}
-                  />
-                </div>
-                <div className="form-group" style={{ marginBottom: '16px' }}>
-                  <label className="form-label">Confirm New Password</label>
-                  <input
-                    type="password"
-                    className="form-input"
-                    value={changePw.confirmPassword}
-                    onChange={(e) => setChangePw({ ...changePw, confirmPassword: e.target.value })}
-                  />
+
+                {showChangePassword && (
+                  <form onSubmit={handleChangePassword} style={{ marginTop: '18px', maxWidth: '420px', background: '#f9fafb', padding: '18px 20px', borderRadius: '10px', border: '1px solid #e5e7eb' }}>
+                    <div style={{ marginBottom: '12px' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>Current Password</label>
+                      <input
+                        type="password"
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          background: '#ffffff',
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                        value={changePw.currentPassword}
+                        onChange={(e) => setChangePw({ ...changePw, currentPassword: e.target.value })}
+                      />
+                    </div>
+                    <div style={{ marginBottom: '12px' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>New Password</label>
+                      <input
+                        type="password"
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          background: '#ffffff',
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                        value={changePw.newPassword}
+                        onChange={(e) => setChangePw({ ...changePw, newPassword: e.target.value })}
+                      />
+                    </div>
+                    <div style={{ marginBottom: '16px' }}>
+                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>Confirm New Password</label>
+                      <input
+                        type="password"
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          background: '#ffffff',
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                        value={changePw.confirmPassword}
+                        onChange={(e) => setChangePw({ ...changePw, confirmPassword: e.target.value })}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="sample1-hero-btn"
+                      disabled={changePwLoading}
+                      style={{ opacity: changePwLoading ? 0.7 : 1 }}
+                    >
+                      {changePwLoading ? 'Updating...' : 'Update Password'}
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+
+            {/* Right Column Widgets (Matching Sample-1 Layout) */}
+            <div>
+              {/* Forest Conservation Widget Banner */}
+              <div className="sample1-widget-banner">
+                <div className="sample1-widget-banner-title">🌲 Forest & Wildlife Protection</div>
+                <div className="sample1-widget-banner-sub">
+                  Help preserve Betla's biodiversity. Keep wild animals safe, follow zone rules, and report emergencies instantly.
                 </div>
                 <button
-                  type="submit"
-                  className={`sample1-hero-btn ${changePwLoading ? 'btn-loading' : ''}`}
-                  disabled={changePwLoading}
+                  className="sample1-hero-btn"
+                  style={{ background: '#10b981', color: 'white', fontSize: '0.78rem', padding: '6px 14px', width: '100%', justifyContent: 'center' }}
+                  onClick={() => navigate('/safety-hub')}
                 >
-                  Update Password
+                  <IconShield /> Safety & Emergency Hub
                 </button>
-              </form>
-            )}
+              </div>
+
+              {/* User Overview Widget */}
+              <div className="sample1-widget">
+                <div className="sample1-widget-title">
+                  <span>Profile Overview</span>
+                  <span style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 600 }}>Active</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid #f3f4f6' }}>
+                  <div style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '50%',
+                    background: '#d1fae5',
+                    color: '#059669',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 800,
+                    fontSize: '1.1rem'
+                  }}>
+                    {user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {user.firstName} {user.lastName}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: '#6b7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {user.email}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '0.78rem', borderBottom: '1px solid #f3f4f6' }}>
+                  <span style={{ color: '#6b7280' }}>Role Type</span>
+                  <span style={{ fontWeight: 700, color: '#111827' }}>{user.role.name.replace('_', ' ')}</span>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '0.78rem', borderBottom: '1px solid #f3f4f6' }}>
+                  <span style={{ color: '#6b7280' }}>Email Status</span>
+                  <span style={{ fontWeight: 700, color: user.emailVerified ? '#10b981' : '#ef4444' }}>
+                    {user.emailVerified ? 'Verified' : 'Unverified'}
+                  </span>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '0.78rem', marginBottom: '10px' }}>
+                  <span style={{ color: '#6b7280' }}>Permissions</span>
+                  <span style={{ fontWeight: 700, color: '#111827' }}>{user.permissions.length} Assigned</span>
+                </div>
+
+                <button
+                  className="sample1-btn-secondary"
+                  style={{ width: '100%', justifyContent: 'center', fontSize: '0.78rem', padding: '7px 12px' }}
+                  onClick={() => navigate('/profile')}
+                >
+                  <IconUser /> View Full Profile
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Footer */}

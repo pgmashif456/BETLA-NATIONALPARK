@@ -64,6 +64,13 @@ const destinationImages: Record<string, string> = {
   'default': 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=600&q=80',
 };
 
+const heroImages = [
+  heroImgAsset,
+  destinationImages['betla-fort'],
+  destinationImages['lodh-falls'],
+  destinationImages['koyel-viewpoint'],
+];
+
 // Inline SVG Vector Icon Helpers
 const IconHome = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
 const IconCompass = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>;
@@ -210,6 +217,16 @@ export const DiscoveryPage: React.FC = () => {
   const [nearbyLng, setNearbyLng] = useState('84.1913');
   const [nearbyDestinations, setNearbyDestinations] = useState<Destination[]>([]);
   const [isSearchingNearby, setIsSearchingNearby] = useState(false);
+
+  // Hero auto-rotating carousel state (4-5s interval)
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [currentHeroIndex]);
 
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [weatherLoading, setWeatherLoading] = useState(true);
@@ -388,10 +405,7 @@ export const DiscoveryPage: React.FC = () => {
     return destinationImages['default'];
   };
 
-  const heroBackgroundStyle = {
-    backgroundImage: `linear-gradient(to right, rgba(9, 26, 16, 0.92) 0%, rgba(9, 26, 16, 0.65) 55%, rgba(9, 26, 16, 0.3) 100%), url(${heroImgAsset})`,
-  };
-
+  
   return (
     <div className="sample1-layout">
       {/* --- Left Compact Sidebar --- */}
@@ -491,8 +505,26 @@ export const DiscoveryPage: React.FC = () => {
         {/* Main Body */}
         <div className="sample1-container">
           {/* Sample-1 Tiger Forest Hero Banner */}
-          <div className="sample1-hero" style={heroBackgroundStyle}>
-            <div className="sample1-hero-content">
+          <div className="sample1-hero" style={{ position: 'relative', overflow: 'hidden' }}>
+            {/* 4 Auto-Rotating Background Crossfade Slides */}
+            {heroImages.map((imgSrc, idx) => (
+              <div
+                key={idx}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `linear-gradient(to right, rgba(9, 26, 16, 0.92) 0%, rgba(9, 26, 16, 0.65) 55%, rgba(9, 26, 16, 0.3) 100%), url(${imgSrc})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  opacity: currentHeroIndex === idx ? 1 : 0,
+                  transition: 'opacity 0.85s ease-in-out',
+                  pointerEvents: 'none',
+                  zIndex: 0
+                }}
+              />
+            ))}
+
+            <div className="sample1-hero-content" style={{ position: 'relative', zIndex: 1 }}>
               <div className="sample1-hero-tag">WELCOME TO</div>
               <h1 className="sample1-hero-title">Betla National Park</h1>
               <div className="sample1-hero-sub">Nature • Adventure • Conservation</div>
@@ -504,9 +536,24 @@ export const DiscoveryPage: React.FC = () => {
                 Explore Now →
               </button>
             </div>
-            <div className="sample1-hero-quote">
+
+            <div className="sample1-hero-quote" style={{ position: 'relative', zIndex: 1 }}>
               "In every walk with nature one receives far more than he seeks."
               <div style={{ marginTop: '4px', fontSize: '0.72rem', color: '#6ee7b7' }}>— John Muir</div>
+            </div>
+
+            {/* 4 Dynamic Carousel Indicator Dots */}
+            <div className="sample1-hero-dots">
+              {heroImages.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setCurrentHeroIndex(idx)}
+                  className={`sample1-hero-dot ${currentHeroIndex === idx ? 'active' : ''}`}
+                  aria-label={`View slide ${idx + 1}`}
+                  title={`View slide ${idx + 1}`}
+                />
+              ))}
             </div>
           </div>
 
@@ -771,35 +818,53 @@ export const DiscoveryPage: React.FC = () => {
             {/* Right Column Widgets Stack */}
             <div>
               {/* Widget 1: Today at Betla Weather Card */}
-              <div className="sample1-widget">
-                <div className="sample1-widget-title">
-                  <span>Today at Betla</span>
-                  <span style={{ fontSize: '0.7rem', color: '#6b7280', fontWeight: 500 }}>
+              <div className="sample1-weather-card">
+                <div className="sample1-weather-header">
+                  <span className="sample1-weather-title">Today at Betla</span>
+                  <span className="sample1-weather-date">
                     {weatherLoading ? 'Loading...' : weatherData ? weatherData.date : 'Betla, Jharkhand'}
                   </span>
                 </div>
                 {weatherError ? (
-                  <div style={{ padding: '12px 0', fontSize: '0.8rem', color: '#6b7280', textAlign: 'center' }}>
+                  <div style={{ padding: '12px 0', fontSize: '0.8rem', color: '#9ca3af', textAlign: 'center' }}>
                     Weather unavailable
                   </div>
                 ) : (
                   <>
-                    <div className="sample1-weather-main">
-                      {renderWeatherIcon(weatherData?.weatherCode)}
+                    <div className="sample1-weather-body">
+                      <div className="sample1-weather-icon-wrap">
+                        {renderWeatherIcon(weatherData?.weatherCode)}
+                      </div>
                       <div>
                         <div className="sample1-weather-temp">
                           {weatherLoading ? '--°C' : `${weatherData?.temperature}°C`}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
+                        <div className="sample1-weather-condition">
                           {weatherLoading ? 'Updating weather...' : weatherData?.condition}
                         </div>
                       </div>
                     </div>
                     <div className="sample1-weather-grid">
-                      <div><IconDroplet /> Humidity: <strong>{weatherLoading ? '--%' : `${weatherData?.humidity}%`}</strong></div>
-                      <div><IconWind /> Wind: <strong>{weatherLoading ? '-- km/h' : `${weatherData?.windSpeed} km/h`}</strong></div>
-                      <div><IconSunrise /> Sunrise: <strong>{weatherLoading ? '--:--' : weatherData?.sunrise}</strong></div>
-                      <div><IconSunset /> Sunset: <strong>{weatherLoading ? '--:--' : weatherData?.sunset}</strong></div>
+                      <div className="sample1-weather-stat">
+                        <IconDroplet />
+                        <span className="sample1-weather-stat-label">Humidity:</span>
+                        <span className="sample1-weather-stat-val">{weatherLoading ? '--%' : `${weatherData?.humidity}%`}</span>
+                      </div>
+                      <div className="sample1-weather-stat">
+                        <IconWind />
+                        <span className="sample1-weather-stat-label">Wind:</span>
+                        <span className="sample1-weather-stat-val">{weatherLoading ? '-- km/h' : `${weatherData?.windSpeed} km/h`}</span>
+                      </div>
+                      <div className="sample1-weather-stat">
+                        <IconSunrise />
+                        <span className="sample1-weather-stat-label">Sunrise:</span>
+                        <span className="sample1-weather-stat-val">{weatherLoading ? '--:--' : weatherData?.sunrise}</span>
+                      </div>
+                      <div className="sample1-weather-stat">
+                        <IconSunset />
+                        <span className="sample1-weather-stat-label">Sunset:</span>
+                        <span className="sample1-weather-stat-val">{weatherLoading ? '--:--' : weatherData?.sunset}</span>
+                      </div>
                     </div>
                   </>
                 )}
