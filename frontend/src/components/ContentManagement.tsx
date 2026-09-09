@@ -272,85 +272,112 @@ export const ContentManagement: React.FC<ContentManagementProps> = ({ isAdmin })
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
-      <div className="glass-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Header Banner */}
+      <div style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h2 style={{ fontSize: 'var(--text-xl)', color: 'var(--color-primary)', marginBottom: 'var(--space-xs)' }}>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111827', margin: 0 }}>
               M3 Content Management
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-sm)' }}>
+            <p style={{ color: '#6b7280', fontSize: 13, marginTop: 4, marginBottom: 0 }}>
               Manage official Betla National Park destinations, attractions, experiences, and activities.
             </p>
           </div>
-          <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
-            <span className="badge badge-primary">Destinations: {destinations.length}</span>
-            <span className="badge badge-accent">Attractions: {attractions.length}</span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <span style={{ fontSize: 12, padding: '4px 10px', borderRadius: 12, backgroundColor: '#dcfce7', color: '#166534', fontWeight: 600 }}>
+              Destinations: {destinations.length}
+            </span>
+            <span style={{ fontSize: 12, padding: '4px 10px', borderRadius: 12, backgroundColor: '#e0e7ff', color: '#3730a3', fontWeight: 600 }}>
+              Attractions: {attractions.length}
+            </span>
           </div>
         </div>
         {message && (
-          <div style={{ marginTop: 'var(--space-md)', padding: 'var(--space-sm) var(--space-md)', borderRadius: 'var(--radius-md)', backgroundColor: message.type === 'success' ? 'rgba(52, 211, 153, 0.15)' : 'rgba(239, 68, 68, 0.15)', color: message.type === 'success' ? '#34d399' : '#f87171', fontSize: 'var(--text-sm)' }}>
+          <div style={{ marginTop: 14, padding: '10px 14px', borderRadius: 8, backgroundColor: message.type === 'success' ? '#dcfce7' : '#fee2e2', color: message.type === 'success' ? '#166534' : '#991b1b', fontSize: 13, fontWeight: 500 }}>
             {message.text}
           </div>
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: 'var(--space-xs)', borderBottom: '1px solid var(--border-color)', paddingBottom: 'var(--space-xs)' }}>
-        <button className={`btn ${subTab === 'destinations' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setSubTab('destinations')} style={{ padding: '8px 16px', fontSize: 'var(--text-sm)' }}>
-          Destinations ({destinations.length})
-        </button>
-        <button className={`btn ${subTab === 'attractions' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setSubTab('attractions')} style={{ padding: '8px 16px', fontSize: 'var(--text-sm)' }}>
-          Attractions ({attractions.length})
-        </button>
-        <button className={`btn ${subTab === 'experiences' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setSubTab('experiences')} style={{ padding: '8px 16px', fontSize: 'var(--text-sm)' }}>
-          Experiences ({experiences.length})
-        </button>
-        <button className={`btn ${subTab === 'activities' ? 'btn-primary' : 'btn-secondary'}`} onClick={() => setSubTab('activities')} style={{ padding: '8px 16px', fontSize: 'var(--text-sm)' }}>
-          Activities ({activities.length})
-        </button>
+      {/* Sub Tabs */}
+      <div style={{ display: 'flex', gap: 8, borderBottom: '1px solid #e5e7eb', paddingBottom: 10 }}>
+        {(['destinations', 'attractions', 'experiences', 'activities'] as const).map((tab) => {
+          const count = tab === 'destinations' ? destinations.length : tab === 'attractions' ? attractions.length : tab === 'experiences' ? experiences.length : activities.length;
+          const label = tab.charAt(0).toUpperCase() + tab.slice(1);
+          const isSelected = subTab === tab;
+          return (
+            <button
+              key={tab}
+              onClick={() => setSubTab(tab)}
+              style={{
+                padding: '8px 16px',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+                backgroundColor: isSelected ? '#15803d' : '#ffffff',
+                color: isSelected ? '#ffffff' : '#4b5563',
+                boxShadow: isSelected ? 'none' : '0 1px 2px rgba(0,0,0,0.03)',
+                borderWidth: isSelected ? 0 : 1,
+                borderStyle: 'solid',
+                borderColor: '#e5e7eb',
+              }}
+            >
+              {label} ({count})
+            </button>
+          );
+        })}
       </div>
 
+      {/* DESTINATIONS SUBTAB */}
       {subTab === 'destinations' && (
-        <div className="glass-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)' }}>Destinations Directory</h3>
-            <button className="btn btn-primary" onClick={() => handleOpenDestModal()}>+ Add Destination</button>
+        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: 0 }}>Destinations Directory</h3>
+            <button
+              onClick={() => handleOpenDestModal()}
+              style={{ padding: '8px 16px', backgroundColor: '#15803d', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+            >
+              + Add Destination
+            </button>
           </div>
           {destinations.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-2xl)', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: 32, color: '#6b7280', fontSize: 13 }}>
               No destinations found. Click "+ Add Destination" to create the first destination.
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 'var(--text-sm)' }}>
+            <div style={{ overflowX: 'auto', border: '1px solid #e5e7eb', borderRadius: 8 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
-                    <th style={{ padding: '12px' }}>Name</th>
-                    <th style={{ padding: '12px' }}>Location</th>
-                    <th style={{ padding: '12px' }}>Status</th>
-                    <th style={{ padding: '12px' }}>Featured</th>
-                    <th style={{ padding: '12px' }}>Actions</th>
+                  <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb', color: '#4b5563', fontWeight: 600 }}>
+                    <th style={{ padding: '12px 16px' }}>Name</th>
+                    <th style={{ padding: '12px 16px' }}>Location</th>
+                    <th style={{ padding: '12px 16px' }}>Status</th>
+                    <th style={{ padding: '12px 16px' }}>Featured</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {destinations.map((dest) => (
-                    <tr key={dest.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td style={{ padding: '12px', fontWeight: 600 }}>{dest.name}</td>
-                      <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{dest.location || '—'}</td>
-                      <td style={{ padding: '12px' }}>
-                        <span className={`badge ${dest.status === 'PUBLISHED' ? 'badge-primary' : 'badge-accent'}`}>
+                    <tr key={dest.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                      <td style={{ padding: '12px 16px', fontWeight: 600, color: '#111827' }}>{dest.name}</td>
+                      <td style={{ padding: '12px 16px', color: '#6b7280' }}>{dest.location || '—'}</td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <span style={{ padding: '3px 8px', borderRadius: 12, fontSize: 11, fontWeight: 600, backgroundColor: dest.status === 'PUBLISHED' ? '#dcfce7' : '#fef3c7', color: dest.status === 'PUBLISHED' ? '#166534' : '#92400e' }}>
                           {dest.status}
                         </span>
                       </td>
-                      <td style={{ padding: '12px' }}>{dest.isFeatured ? '⭐ Yes' : 'No'}</td>
-                      <td style={{ padding: '12px' }}>
-                        <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
-                          <button className="btn btn-secondary btn-sm" onClick={() => handleOpenDestModal(dest)}>Edit</button>
-                          <button className={`btn btn-sm ${dest.status === 'PUBLISHED' ? 'btn-secondary' : 'btn-primary'}`} onClick={() => handleToggleDestStatus(dest)}>
+                      <td style={{ padding: '12px 16px', color: '#4b5563' }}>{dest.isFeatured ? '⭐ Yes' : 'No'}</td>
+                      <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                        <div style={{ display: 'inline-flex', gap: 6 }}>
+                          <button onClick={() => handleOpenDestModal(dest)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Edit</button>
+                          <button onClick={() => handleToggleDestStatus(dest)} style={{ padding: '4px 10px', borderRadius: 6, border: 'none', backgroundColor: dest.status === 'PUBLISHED' ? '#f3f4f6' : '#15803d', color: dest.status === 'PUBLISHED' ? '#374151' : '#ffffff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                             {dest.status === 'PUBLISHED' ? 'Unpublish' : 'Publish'}
                           </button>
                           {isAdmin && (
-                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteDestination(dest.id)}>Delete</button>
+                            <button onClick={() => handleDeleteDestination(dest.id)} style={{ padding: '4px 10px', borderRadius: 6, border: 'none', backgroundColor: '#fee2e2', color: '#dc2626', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Delete</button>
                           )}
                         </div>
                       </td>
@@ -363,31 +390,38 @@ export const ContentManagement: React.FC<ContentManagementProps> = ({ isAdmin })
         </div>
       )}
 
+      {/* ATTRACTIONS SUBTAB */}
       {subTab === 'attractions' && (
-        <div className="glass-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)' }}>Attractions Directory</h3>
-            <button className="btn btn-primary" disabled={destinations.length === 0} onClick={() => handleOpenAttrModal()}>+ Add Attraction</button>
+        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: 0 }}>Attractions Directory</h3>
+            <button
+              disabled={destinations.length === 0}
+              onClick={() => handleOpenAttrModal()}
+              style={{ padding: '8px 16px', backgroundColor: '#15803d', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: destinations.length === 0 ? 'not-allowed' : 'pointer', opacity: destinations.length === 0 ? 0.6 : 1 }}
+            >
+              + Add Attraction
+            </button>
           </div>
           {destinations.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: 24, color: '#6b7280', fontSize: 13 }}>
               Please create at least one Destination before creating Attractions.
             </div>
           ) : attractions.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-2xl)', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: 32, color: '#6b7280', fontSize: 13 }}>
               No attractions created yet.
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 'var(--text-sm)' }}>
+            <div style={{ overflowX: 'auto', border: '1px solid #e5e7eb', borderRadius: 8 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
-                    <th style={{ padding: '12px' }}>Name</th>
-                    <th style={{ padding: '12px' }}>Destination</th>
-                    <th style={{ padding: '12px' }}>Category</th>
-                    <th style={{ padding: '12px' }}>Hours</th>
-                    <th style={{ padding: '12px' }}>Status</th>
-                    <th style={{ padding: '12px' }}>Actions</th>
+                  <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb', color: '#4b5563', fontWeight: 600 }}>
+                    <th style={{ padding: '12px 16px' }}>Name</th>
+                    <th style={{ padding: '12px 16px' }}>Destination</th>
+                    <th style={{ padding: '12px 16px' }}>Category</th>
+                    <th style={{ padding: '12px 16px' }}>Hours</th>
+                    <th style={{ padding: '12px 16px' }}>Status</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -395,22 +429,20 @@ export const ContentManagement: React.FC<ContentManagementProps> = ({ isAdmin })
                     const dest = destinations.find((d) => d.id === attr.destinationId);
                     const cat = categories.find((c) => c.id === attr.categoryId);
                     return (
-                      <tr key={attr.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                        <td style={{ padding: '12px', fontWeight: 600 }}>{attr.name}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{dest?.name || attr.destinationId}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{cat?.name || '—'}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>
-                          {attr.openingTime || attr.closingTime ? `${attr.openingTime || ''} - ${attr.closingTime || ''}` : '—'}
-                        </td>
-                        <td style={{ padding: '12px' }}>
-                          <span className={`badge ${attr.status === 'PUBLISHED' ? 'badge-primary' : 'badge-accent'}`}>
+                      <tr key={attr.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                        <td style={{ padding: '12px 16px', fontWeight: 600, color: '#111827' }}>{attr.name}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280' }}>{dest?.name || attr.destinationId}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280' }}>{cat?.name || '—'}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280', fontSize: 12 }}>{attr.openingTime ? `${attr.openingTime} - ${attr.closingTime}` : '—'}</td>
+                        <td style={{ padding: '12px 16px' }}>
+                          <span style={{ padding: '3px 8px', borderRadius: 12, fontSize: 11, fontWeight: 600, backgroundColor: attr.status === 'PUBLISHED' ? '#dcfce7' : '#fef3c7', color: attr.status === 'PUBLISHED' ? '#166534' : '#92400e' }}>
                             {attr.status}
                           </span>
                         </td>
-                        <td style={{ padding: '12px' }}>
-                          <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
-                            <button className="btn btn-secondary btn-sm" onClick={() => handleOpenAttrModal(attr)}>Edit</button>
-                            <button className={`btn btn-sm ${attr.status === 'PUBLISHED' ? 'btn-secondary' : 'btn-primary'}`} onClick={() => handleToggleAttrStatus(attr)}>
+                        <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                          <div style={{ display: 'inline-flex', gap: 6 }}>
+                            <button onClick={() => handleOpenAttrModal(attr)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Edit</button>
+                            <button onClick={() => handleToggleAttrStatus(attr)} style={{ padding: '4px 10px', borderRadius: 6, border: 'none', backgroundColor: attr.status === 'PUBLISHED' ? '#f3f4f6' : '#15803d', color: attr.status === 'PUBLISHED' ? '#374151' : '#ffffff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                               {attr.status === 'PUBLISHED' ? 'Unpublish' : 'Publish'}
                             </button>
                           </div>
@@ -425,54 +457,58 @@ export const ContentManagement: React.FC<ContentManagementProps> = ({ isAdmin })
         </div>
       )}
 
+      {/* EXPERIENCES SUBTAB */}
       {subTab === 'experiences' && (
-        <div className="glass-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)' }}>Experiences Directory</h3>
-            <button className="btn btn-primary" disabled={destinations.length === 0} onClick={() => handleOpenExpModal()}>+ Add Experience</button>
+        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: 0 }}>Experiences Directory</h3>
+            <button
+              disabled={destinations.length === 0}
+              onClick={() => handleOpenExpModal()}
+              style={{ padding: '8px 16px', backgroundColor: '#15803d', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: destinations.length === 0 ? 'not-allowed' : 'pointer', opacity: destinations.length === 0 ? 0.6 : 1 }}
+            >
+              + Add Experience
+            </button>
           </div>
           {destinations.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: 24, color: '#6b7280', fontSize: 13 }}>
               Please create at least one Destination before creating Experiences.
             </div>
           ) : experiences.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-2xl)', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: 32, color: '#6b7280', fontSize: 13 }}>
               No experiences created yet.
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 'var(--text-sm)' }}>
+            <div style={{ overflowX: 'auto', border: '1px solid #e5e7eb', borderRadius: 8 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
-                    <th style={{ padding: '12px' }}>Name</th>
-                    <th style={{ padding: '12px' }}>Destination</th>
-                    <th style={{ padding: '12px' }}>Category</th>
-                    <th style={{ padding: '12px' }}>Duration</th>
-                    <th style={{ padding: '12px' }}>Difficulty</th>
-                    <th style={{ padding: '12px' }}>Status</th>
-                    <th style={{ padding: '12px' }}>Actions</th>
+                  <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb', color: '#4b5563', fontWeight: 600 }}>
+                    <th style={{ padding: '12px 16px' }}>Name</th>
+                    <th style={{ padding: '12px 16px' }}>Destination</th>
+                    <th style={{ padding: '12px 16px' }}>Duration</th>
+                    <th style={{ padding: '12px 16px' }}>Difficulty</th>
+                    <th style={{ padding: '12px 16px' }}>Status</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {experiences.map((exp) => {
                     const dest = destinations.find((d) => d.id === exp.destinationId);
-                    const cat = categories.find((c) => c.id === exp.categoryId);
                     return (
-                      <tr key={exp.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                        <td style={{ padding: '12px', fontWeight: 600 }}>{exp.name}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{dest?.name || exp.destinationId}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{cat?.name || '—'}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{exp.duration || '—'}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{exp.difficulty || '—'}</td>
-                        <td style={{ padding: '12px' }}>
-                          <span className={`badge ${exp.status === 'PUBLISHED' ? 'badge-primary' : 'badge-accent'}`}>
+                      <tr key={exp.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                        <td style={{ padding: '12px 16px', fontWeight: 600, color: '#111827' }}>{exp.name}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280' }}>{dest?.name || exp.destinationId}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280', fontSize: 12 }}>{exp.duration || '—'}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280', fontSize: 12 }}>{exp.difficulty || '—'}</td>
+                        <td style={{ padding: '12px 16px' }}>
+                          <span style={{ padding: '3px 8px', borderRadius: 12, fontSize: 11, fontWeight: 600, backgroundColor: exp.status === 'PUBLISHED' ? '#dcfce7' : '#fef3c7', color: exp.status === 'PUBLISHED' ? '#166534' : '#92400e' }}>
                             {exp.status}
                           </span>
                         </td>
-                        <td style={{ padding: '12px' }}>
-                          <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
-                            <button className="btn btn-secondary btn-sm" onClick={() => handleOpenExpModal(exp)}>Edit</button>
-                            <button className={`btn btn-sm ${exp.status === 'PUBLISHED' ? 'btn-secondary' : 'btn-primary'}`} onClick={() => handleToggleExpStatus(exp)}>
+                        <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                          <div style={{ display: 'inline-flex', gap: 6 }}>
+                            <button onClick={() => handleOpenExpModal(exp)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Edit</button>
+                            <button onClick={() => handleToggleExpStatus(exp)} style={{ padding: '4px 10px', borderRadius: 6, border: 'none', backgroundColor: exp.status === 'PUBLISHED' ? '#f3f4f6' : '#15803d', color: exp.status === 'PUBLISHED' ? '#374151' : '#ffffff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                               {exp.status === 'PUBLISHED' ? 'Unpublish' : 'Publish'}
                             </button>
                           </div>
@@ -487,52 +523,56 @@ export const ContentManagement: React.FC<ContentManagementProps> = ({ isAdmin })
         </div>
       )}
 
+      {/* ACTIVITIES SUBTAB */}
       {subTab === 'activities' && (
-        <div className="glass-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)' }}>Activities Directory</h3>
-            <button className="btn btn-primary" disabled={destinations.length === 0} onClick={() => handleOpenActModal()}>+ Add Activity</button>
+        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: 0 }}>Activities Directory</h3>
+            <button
+              disabled={destinations.length === 0}
+              onClick={() => handleOpenActModal()}
+              style={{ padding: '8px 16px', backgroundColor: '#15803d', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: destinations.length === 0 ? 'not-allowed' : 'pointer', opacity: destinations.length === 0 ? 0.6 : 1 }}
+            >
+              + Add Activity
+            </button>
           </div>
           {destinations.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: 24, color: '#6b7280', fontSize: 13 }}>
               Please create at least one Destination before creating Activities.
             </div>
           ) : activities.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-2xl)', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: 32, color: '#6b7280', fontSize: 13 }}>
               No activities created yet.
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 'var(--text-sm)' }}>
+            <div style={{ overflowX: 'auto', border: '1px solid #e5e7eb', borderRadius: 8 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
-                    <th style={{ padding: '12px' }}>Name</th>
-                    <th style={{ padding: '12px' }}>Destination</th>
-                    <th style={{ padding: '12px' }}>Category</th>
-                    <th style={{ padding: '12px' }}>Duration</th>
-                    <th style={{ padding: '12px' }}>Status</th>
-                    <th style={{ padding: '12px' }}>Actions</th>
+                  <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb', color: '#4b5563', fontWeight: 600 }}>
+                    <th style={{ padding: '12px 16px' }}>Name</th>
+                    <th style={{ padding: '12px 16px' }}>Destination</th>
+                    <th style={{ padding: '12px 16px' }}>Duration</th>
+                    <th style={{ padding: '12px 16px' }}>Status</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {activities.map((act) => {
                     const dest = destinations.find((d) => d.id === act.destinationId);
-                    const cat = categories.find((c) => c.id === act.categoryId);
                     return (
-                      <tr key={act.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                        <td style={{ padding: '12px', fontWeight: 600 }}>{act.name}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{dest?.name || act.destinationId}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{cat?.name || '—'}</td>
-                        <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{act.duration || '—'}</td>
-                        <td style={{ padding: '12px' }}>
-                          <span className={`badge ${act.status === 'PUBLISHED' ? 'badge-primary' : 'badge-accent'}`}>
+                      <tr key={act.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                        <td style={{ padding: '12px 16px', fontWeight: 600, color: '#111827' }}>{act.name}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280' }}>{dest?.name || act.destinationId}</td>
+                        <td style={{ padding: '12px 16px', color: '#6b7280', fontSize: 12 }}>{act.duration || '—'}</td>
+                        <td style={{ padding: '12px 16px' }}>
+                          <span style={{ padding: '3px 8px', borderRadius: 12, fontSize: 11, fontWeight: 600, backgroundColor: act.status === 'PUBLISHED' ? '#dcfce7' : '#fef3c7', color: act.status === 'PUBLISHED' ? '#166534' : '#92400e' }}>
                             {act.status}
                           </span>
                         </td>
-                        <td style={{ padding: '12px' }}>
-                          <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
-                            <button className="btn btn-secondary btn-sm" onClick={() => handleOpenActModal(act)}>Edit</button>
-                            <button className={`btn btn-sm ${act.status === 'PUBLISHED' ? 'btn-secondary' : 'btn-primary'}`} onClick={() => handleToggleActStatus(act)}>
+                        <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                          <div style={{ display: 'inline-flex', gap: 6 }}>
+                            <button onClick={() => handleOpenActModal(act)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Edit</button>
+                            <button onClick={() => handleToggleActStatus(act)} style={{ padding: '4px 10px', borderRadius: 6, border: 'none', backgroundColor: act.status === 'PUBLISHED' ? '#f3f4f6' : '#15803d', color: act.status === 'PUBLISHED' ? '#374151' : '#ffffff', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                               {act.status === 'PUBLISHED' ? 'Unpublish' : 'Publish'}
                             </button>
                           </div>
@@ -547,232 +587,219 @@ export const ContentManagement: React.FC<ContentManagementProps> = ({ isAdmin })
         </div>
       )}
 
+      {/* MODAL: DESTINATION */}
       {activeModal === 'destination' && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 'var(--space-md)' }}>
-          <div className="glass-card" style={{ maxWidth: 600, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)' }}>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 20 }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: 12, border: '1px solid #e5e7eb', width: '100%', maxWidth: 540, maxHeight: '90vh', overflowY: 'auto', padding: 24, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#111827', margin: '0 0 16px' }}>
               {editingItem ? 'Edit Destination' : 'Create New Destination'}
             </h3>
-            <form onSubmit={handleSubmitDestination} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-              <div className="form-group">
-                <label className="form-label">Destination Name *</label>
-                <input type="text" required value={destForm.name} onChange={(e) => setDestForm({ ...destForm, name: e.target.value })} placeholder="e.g. Betla Fort" className="form-input" />
+            <form onSubmit={handleSubmitDestination} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Name *</label>
+                <input required type="text" value={destForm.name} onChange={(e) => setDestForm({ ...destForm, name: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Slug (Optional)</label>
-                <input type="text" value={destForm.slug} onChange={(e) => setDestForm({ ...destForm, slug: e.target.value })} placeholder="e.g. betla-fort" className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Slug</label>
+                <input type="text" value={destForm.slug} onChange={(e) => setDestForm({ ...destForm, slug: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Short Description</label>
-                <input type="text" maxLength={500} value={destForm.shortDescription} onChange={(e) => setDestForm({ ...destForm, shortDescription: e.target.value })} placeholder="Brief summary" className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Short Description</label>
+                <input type="text" value={destForm.shortDescription} onChange={(e) => setDestForm({ ...destForm, shortDescription: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Detailed Description</label>
-                <textarea rows={3} value={destForm.description} onChange={(e) => setDestForm({ ...destForm, description: e.target.value })} placeholder="Full information..." className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Full Description</label>
+                <textarea rows={3} value={destForm.description} onChange={(e) => setDestForm({ ...destForm, description: e.target.value })} style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 'var(--space-sm)' }}>
-                <div className="form-group">
-                  <label className="form-label">Location</label>
-                  <input type="text" value={destForm.location} onChange={(e) => setDestForm({ ...destForm, location: e.target.value })} placeholder="e.g. Palamau" className="form-input" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Latitude</label>
+                  <input type="number" step="any" value={destForm.latitude} onChange={(e) => setDestForm({ ...destForm, latitude: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Latitude</label>
-                  <input type="number" step="any" value={destForm.latitude} onChange={(e) => setDestForm({ ...destForm, latitude: e.target.value })} placeholder="23.8872" className="form-input" />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Longitude</label>
-                  <input type="number" step="any" value={destForm.longitude} onChange={(e) => setDestForm({ ...destForm, longitude: e.target.value })} placeholder="84.1913" className="form-input" />
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Longitude</label>
+                  <input type="number" step="any" value={destForm.longitude} onChange={(e) => setDestForm({ ...destForm, longitude: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: 'var(--space-md)', alignItems: 'center' }}>
-                <div className="form-group" style={{ flex: 1 }}>
-                  <label className="form-label">Status</label>
-                  <select value={destForm.status} onChange={(e) => setDestForm({ ...destForm, status: e.target.value })} className="form-input">
-                    <option value="DRAFT">DRAFT (Hidden from Tourists)</option>
-                    <option value="PUBLISHED">PUBLISHED (Visible in Discovery)</option>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Status</label>
+                  <select value={destForm.status} onChange={(e) => setDestForm({ ...destForm, status: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
+                    <option value="DRAFT">DRAFT</option>
+                    <option value="PUBLISHED">PUBLISHED</option>
+                    <option value="ARCHIVED">ARCHIVED</option>
                   </select>
                 </div>
-                <div className="form-group" style={{ flex: 1, display: 'flex', alignItems: 'center', paddingTop: '20px' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                    <input type="checkbox" checked={destForm.isFeatured} onChange={(e) => setDestForm({ ...destForm, isFeatured: e.target.checked })} />
-                    Feature on Homepage
-                  </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 20 }}>
+                  <input type="checkbox" id="destFeatured" checked={destForm.isFeatured} onChange={(e) => setDestForm({ ...destForm, isFeatured: e.target.checked })} />
+                  <label htmlFor="destFeatured" style={{ fontSize: 13, fontWeight: 600, color: '#374151', cursor: 'pointer' }}>Featured Destination</label>
                 </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Saving...' : editingItem ? 'Update Destination' : 'Create Destination'}</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+                <button type="button" onClick={() => setActiveModal(null)} style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={loading} style={{ padding: '8px 18px', borderRadius: 6, border: 'none', backgroundColor: '#15803d', color: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                  {editingItem ? 'Save Changes' : 'Create Destination'}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
+      {/* MODAL: ATTRACTION */}
       {activeModal === 'attraction' && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 'var(--space-md)' }}>
-          <div className="glass-card" style={{ maxWidth: 560, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)' }}>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 20 }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: 12, border: '1px solid #e5e7eb', width: '100%', maxWidth: 540, maxHeight: '90vh', overflowY: 'auto', padding: 24, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#111827', margin: '0 0 16px' }}>
               {editingItem ? 'Edit Attraction' : 'Create New Attraction'}
             </h3>
-            <form onSubmit={handleSubmitAttraction} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-              <div className="form-group">
-                <label className="form-label">Destination *</label>
-                <select required value={attrForm.destinationId} onChange={(e) => setAttrForm({ ...attrForm, destinationId: e.target.value })} className="form-input">
-                  <option value="">Select Target Destination</option>
+            <form onSubmit={handleSubmitAttraction} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Destination *</label>
+                <select required value={attrForm.destinationId} onChange={(e) => setAttrForm({ ...attrForm, destinationId: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
                   {destinations.map((d) => (
                     <option key={d.id} value={d.id}>{d.name}</option>
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">Category (Optional)</label>
-                <select value={attrForm.categoryId} onChange={(e) => setAttrForm({ ...attrForm, categoryId: e.target.value })} className="form-input">
-                  <option value="">Select Category</option>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Attraction Name *</label>
+                <input required type="text" value={attrForm.name} onChange={(e) => setAttrForm({ ...attrForm, name: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Category</label>
+                <select value={attrForm.categoryId} onChange={(e) => setAttrForm({ ...attrForm, categoryId: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
+                  <option value="">No Category</option>
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>{c.name}</option>
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">Attraction Name *</label>
-                <input type="text" required value={attrForm.name} onChange={(e) => setAttrForm({ ...attrForm, name: e.target.value })} placeholder="e.g. Seven Chambers Viewpoint" className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Description</label>
+                <textarea rows={3} value={attrForm.description} onChange={(e) => setAttrForm({ ...attrForm, description: e.target.value })} style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea rows={3} value={attrForm.description} onChange={(e) => setAttrForm({ ...attrForm, description: e.target.value })} placeholder="Attraction details..." className="form-input" />
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-sm)' }}>
-                <div className="form-group">
-                  <label className="form-label">Opening Time</label>
-                  <input type="text" value={attrForm.openingTime} onChange={(e) => setAttrForm({ ...attrForm, openingTime: e.target.value })} placeholder="06:00 AM" className="form-input" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Opening Time</label>
+                  <input type="text" placeholder="06:00 AM" value={attrForm.openingTime} onChange={(e) => setAttrForm({ ...attrForm, openingTime: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Closing Time</label>
-                  <input type="text" value={attrForm.closingTime} onChange={(e) => setAttrForm({ ...attrForm, closingTime: e.target.value })} placeholder="05:00 PM" className="form-input" />
+                <div>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Closing Time</label>
+                  <input type="text" placeholder="06:00 PM" value={attrForm.closingTime} onChange={(e) => setAttrForm({ ...attrForm, closingTime: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
                 </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">Status</label>
-                <select value={attrForm.status} onChange={(e) => setAttrForm({ ...attrForm, status: e.target.value })} className="form-input">
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Status</label>
+                <select value={attrForm.status} onChange={(e) => setAttrForm({ ...attrForm, status: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
                   <option value="DRAFT">DRAFT</option>
                   <option value="PUBLISHED">PUBLISHED</option>
+                  <option value="ARCHIVED">ARCHIVED</option>
                 </select>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Saving...' : editingItem ? 'Update Attraction' : 'Create Attraction'}</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+                <button type="button" onClick={() => setActiveModal(null)} style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={loading} style={{ padding: '8px 18px', borderRadius: 6, border: 'none', backgroundColor: '#15803d', color: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                  {editingItem ? 'Save Changes' : 'Create Attraction'}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
+      {/* MODAL: EXPERIENCE */}
       {activeModal === 'experience' && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 'var(--space-md)' }}>
-          <div className="glass-card" style={{ maxWidth: 560, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)' }}>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 20 }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: 12, border: '1px solid #e5e7eb', width: '100%', maxWidth: 540, maxHeight: '90vh', overflowY: 'auto', padding: 24, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#111827', margin: '0 0 16px' }}>
               {editingItem ? 'Edit Experience' : 'Create New Experience'}
             </h3>
-            <form onSubmit={handleSubmitExperience} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-              <div className="form-group">
-                <label className="form-label">Destination *</label>
-                <select required value={expForm.destinationId} onChange={(e) => setExpForm({ ...expForm, destinationId: e.target.value })} className="form-input">
-                  <option value="">Select Target Destination</option>
+            <form onSubmit={handleSubmitExperience} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Destination *</label>
+                <select required value={expForm.destinationId} onChange={(e) => setExpForm({ ...expForm, destinationId: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
                   {destinations.map((d) => (
                     <option key={d.id} value={d.id}>{d.name}</option>
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">Category (Optional)</label>
-                <select value={expForm.categoryId} onChange={(e) => setExpForm({ ...expForm, categoryId: e.target.value })} className="form-input">
-                  <option value="">Select Category</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Experience Name *</label>
+                <input required type="text" value={expForm.name} onChange={(e) => setExpForm({ ...expForm, name: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Experience Name *</label>
-                <input type="text" required value={expForm.name} onChange={(e) => setExpForm({ ...expForm, name: e.target.value })} placeholder="e.g. Sunset Jungle Trek" className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Duration</label>
+                <input type="text" placeholder="3 Hours" value={expForm.duration} onChange={(e) => setExpForm({ ...expForm, duration: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea rows={3} value={expForm.description} onChange={(e) => setExpForm({ ...expForm, description: e.target.value })} placeholder="Experience details..." className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Difficulty</label>
+                <input type="text" placeholder="Moderate" value={expForm.difficulty} onChange={(e) => setExpForm({ ...expForm, difficulty: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-sm)' }}>
-                <div className="form-group">
-                  <label className="form-label">Duration</label>
-                  <input type="text" value={expForm.duration} onChange={(e) => setExpForm({ ...expForm, duration: e.target.value })} placeholder="e.g. 2 Hours" className="form-input" />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Difficulty</label>
-                  <input type="text" value={expForm.difficulty} onChange={(e) => setExpForm({ ...expForm, difficulty: e.target.value })} placeholder="e.g. Easy / Moderate" className="form-input" />
-                </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Description</label>
+                <textarea rows={3} value={expForm.description} onChange={(e) => setExpForm({ ...expForm, description: e.target.value })} style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Status</label>
-                <select value={expForm.status} onChange={(e) => setExpForm({ ...expForm, status: e.target.value })} className="form-input">
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Status</label>
+                <select value={expForm.status} onChange={(e) => setExpForm({ ...expForm, status: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
                   <option value="DRAFT">DRAFT</option>
                   <option value="PUBLISHED">PUBLISHED</option>
+                  <option value="ARCHIVED">ARCHIVED</option>
                 </select>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Saving...' : editingItem ? 'Update Experience' : 'Create Experience'}</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+                <button type="button" onClick={() => setActiveModal(null)} style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={loading} style={{ padding: '8px 18px', borderRadius: 6, border: 'none', backgroundColor: '#15803d', color: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                  {editingItem ? 'Save Changes' : 'Create Experience'}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
+      {/* MODAL: ACTIVITY */}
       {activeModal === 'activity' && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 'var(--space-md)' }}>
-          <div className="glass-card" style={{ maxWidth: 560, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)' }}>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 20 }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: 12, border: '1px solid #e5e7eb', width: '100%', maxWidth: 540, maxHeight: '90vh', overflowY: 'auto', padding: 24, boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#111827', margin: '0 0 16px' }}>
               {editingItem ? 'Edit Activity' : 'Create New Activity'}
             </h3>
-            <form onSubmit={handleSubmitActivity} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-              <div className="form-group">
-                <label className="form-label">Destination *</label>
-                <select required value={actForm.destinationId} onChange={(e) => setActForm({ ...actForm, destinationId: e.target.value })} className="form-input">
-                  <option value="">Select Target Destination</option>
+            <form onSubmit={handleSubmitActivity} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Destination *</label>
+                <select required value={actForm.destinationId} onChange={(e) => setActForm({ ...actForm, destinationId: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
                   {destinations.map((d) => (
                     <option key={d.id} value={d.id}>{d.name}</option>
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label className="form-label">Category (Optional)</label>
-                <select value={actForm.categoryId} onChange={(e) => setActForm({ ...actForm, categoryId: e.target.value })} className="form-input">
-                  <option value="">Select Category</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Activity Name *</label>
+                <input required type="text" value={actForm.name} onChange={(e) => setActForm({ ...actForm, name: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Activity Name *</label>
-                <input type="text" required value={actForm.name} onChange={(e) => setActForm({ ...actForm, name: e.target.value })} placeholder="e.g. Elephant Safari Trail" className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Duration</label>
+                <input type="text" placeholder="1 Hour" value={actForm.duration} onChange={(e) => setActForm({ ...actForm, duration: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea rows={3} value={actForm.description} onChange={(e) => setActForm({ ...actForm, description: e.target.value })} placeholder="Activity details..." className="form-input" />
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Description</label>
+                <textarea rows={3} value={actForm.description} onChange={(e) => setActForm({ ...actForm, description: e.target.value })} style={{ width: '100%', padding: '8px 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }} />
               </div>
-              <div className="form-group">
-                <label className="form-label">Duration</label>
-                <input type="text" value={actForm.duration} onChange={(e) => setActForm({ ...actForm, duration: e.target.value })} placeholder="e.g. 1.5 Hours" className="form-input" />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Status</label>
-                <select value={actForm.status} onChange={(e) => setActForm({ ...actForm, status: e.target.value })} className="form-input">
+              <div>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 4 }}>Status</label>
+                <select value={actForm.status} onChange={(e) => setActForm({ ...actForm, status: e.target.value })} style={{ width: '100%', height: 36, padding: '0 10px', borderRadius: 6, border: '1px solid #d1d5db', fontSize: 13 }}>
                   <option value="DRAFT">DRAFT</option>
                   <option value="PUBLISHED">PUBLISHED</option>
+                  <option value="ARCHIVED">ARCHIVED</option>
                 </select>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--space-sm)', marginTop: 'var(--space-sm)' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Saving...' : editingItem ? 'Update Activity' : 'Create Activity'}</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+                <button type="button" onClick={() => setActiveModal(null)} style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#374151', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" disabled={loading} style={{ padding: '8px 18px', borderRadius: 6, border: 'none', backgroundColor: '#15803d', color: '#ffffff', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                  {editingItem ? 'Save Changes' : 'Create Activity'}
+                </button>
               </div>
             </form>
           </div>

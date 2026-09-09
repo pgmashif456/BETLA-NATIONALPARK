@@ -4,6 +4,7 @@ import { authController } from './auth.controller';
 import { authenticate } from './auth.middleware';
 
 const isTestEnv = process.env.NODE_ENV === 'test';
+const isDevEnv = process.env.NODE_ENV === 'development';
 
 const router = Router();
 
@@ -27,7 +28,7 @@ const loginLimiter = rateLimit({
 const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 3,
-  skip: () => isTestEnv,
+  skip: () => isTestEnv || isDevEnv,
   message: {
     success: false,
     error: {
