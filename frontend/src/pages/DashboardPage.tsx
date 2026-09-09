@@ -248,16 +248,6 @@ export default function DashboardPage() {
       {/* --- Main Area --- */}
       <div className="sample1-main-wrapper">
         <header className="sample1-header">
-          <div className="sample1-search-box">
-            <IconSearch />
-            <input
-              type="text"
-              placeholder="Search places, safaris, attractions..."
-              className="sample1-search-input"
-              onClick={() => navigate('/discover')}
-            />
-          </div>
-
           <div className="sample1-user-controls">
             <button className="sample1-icon-btn" title="Notifications" onClick={() => navigate('/safety-hub')}>
               <IconBell />

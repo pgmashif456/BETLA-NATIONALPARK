@@ -90,12 +90,12 @@ export default function RegisterPage() {
         role: form.role,
       });
 
-      toast.success('Account created! Please verify your email.');
-
-      // In dev mode, auto-navigate with token for easy testing
+      // In dev mode, auto-navigate with token directly to verification without stale toast
       if (result.verificationToken) {
+        toast.dismiss();
         navigate(`/verify?token=${result.verificationToken}`);
       } else {
+        toast.success('Account created! Please check your email to verify.');
         navigate('/verify');
       }
     } catch (err: any) {

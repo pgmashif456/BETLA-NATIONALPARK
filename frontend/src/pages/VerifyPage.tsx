@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { authApi } from '../api/client';
 
@@ -35,19 +35,23 @@ const IconAlertCircle = () => (
 
 export default function VerifyPage() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const token = searchParams.get('token');
   const [status, setStatus] = useState<'verifying' | 'success' | 'error' | 'waiting'>(
     token ? 'verifying' : 'waiting'
   );
   const [message, setMessage] = useState('');
+  const hasVerified = useRef(false);
 
   useEffect(() => {
     const verifyEmail = async (t: string) => {
+      if (hasVerified.current) return;
+      hasVerified.current = true;
+
       try {
-        const response = await authApi.verify(t);
-        setMessage(response.data.data.message);
-        setStatus('success');
-        toast.success('Email verified!');
+        await authApi.verify(t);
+        toast.dismiss();
+        navigate('/login', { replace: true });
       } catch (err: any) {
         setMessage(err.response?.data?.error?.message || 'Verification failed');
         setStatus('error');
@@ -58,7 +62,7 @@ export default function VerifyPage() {
     if (token) {
       verifyEmail(token);
     }
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <div style={{
