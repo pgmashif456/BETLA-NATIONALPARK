@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { safetyApi } from '../api/client';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import heroImg from '../assets/safari_hero.jpg';
 
 interface SafetyAlert {
   id: string;
@@ -146,17 +147,24 @@ export function SafetyHubPage() {
           setAlerts([
             {
               id: 'alt-1',
-              title: 'Monsoon Stream Elevation Watch',
-              message: 'Kechki river crossing water levels elevated. Proceed only with certified forest vehicles.',
+              title: 'Heavy Rain Warning',
+              message: 'Heavy rainfall expected in West zone. Safaris delayed. Avoid river crossings and low-lying areas.',
               severity: 'WARNING',
-              area: 'North Koel River Sector',
+              area: 'West Zone',
             },
             {
               id: 'alt-2',
-              title: 'Elephant Herd Movement Notice',
-              message: 'Herd of 12 wild elephants sighted near Zone 3 road between 05:00 - 08:00 AM. Maintain 100m distance.',
-              severity: 'INFO',
-              area: 'Betla Range Zone 3',
+              title: 'Elephant Movement Reported',
+              message: 'Elephant herd movement detected. Maintain safe distance and avoid night travel.',
+              severity: 'ADVISORY',
+              area: 'Core Area (North)',
+            },
+            {
+              id: 'alt-3',
+              title: 'Fallen Tree on Access Road',
+              message: 'Road cleared. Movement normal.',
+              severity: 'RESOLVED',
+              area: 'Netarhat Road',
             },
           ]);
         }
@@ -311,220 +319,359 @@ export function SafetyHubPage() {
 
         {/* Safety Content Container */}
         <div className="sample1-container">
-          {/* Emergency SOS Banner Card */}
+          
+          {/* Hero Section */}
           <div style={{
-            background: '#ffffff',
-            border: '1px solid #fee2e2',
-            borderRadius: '12px',
-            padding: '24px',
-            marginBottom: '20px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-            textAlign: 'center'
+            position: 'relative',
+            background: `#064e3b url(${heroImg}) center/cover no-repeat`,
+            borderRadius: '16px',
+            padding: '48px 40px',
+            marginBottom: '24px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            overflow: 'hidden'
           }}>
+            {/* Dark gradient overlay */}
             <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: '#fef2f2',
-              color: '#dc2626',
-              padding: '4px 14px',
-              borderRadius: '20px',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              marginBottom: '10px'
-            }}>
-              <IconShield /> 24/7 Tourist Emergency & Incident Response
-            </div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111827', margin: '0 0 8px' }}>
-              Tourist Safety & Emergency Hub
-            </h1>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem', maxWidth: '680px', margin: '0 auto 20px', lineHeight: 1.5 }}>
-              Real-time forest hazard advisories, instant 1-click GPS SOS distress dispatch, and direct incident reporting to Palamau Reserve Control.
-            </p>
+              position: 'absolute',
+              top: 0, left: 0, right: 0, bottom: 0,
+              background: 'linear-gradient(to right, rgba(6, 78, 59, 0.95) 0%, rgba(6, 78, 59, 0.8) 50%, rgba(6, 78, 59, 0.3) 100%)',
+              zIndex: 1
+            }} />
 
-            {/* Big Prominent SOS Button */}
-            <div>
-              <button
-                onClick={handleSOS}
-                disabled={sosLoading}
-                style={{
-                  background: sosTriggered ? '#16a34a' : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-                  color: '#ffffff',
-                  fontSize: '0.95rem',
-                  fontWeight: 800,
-                  letterSpacing: '0.03em',
-                  padding: '12px 28px',
-                  borderRadius: '30px',
-                  boxShadow: sosTriggered ? '0 4px 14px rgba(22, 163, 74, 0.35)' : '0 4px 14px rgba(220, 38, 38, 0.35)',
-                  border: 'none',
-                  cursor: sosLoading ? 'wait' : 'pointer',
+            <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px' }}>
+              <div style={{ maxWidth: '600px' }}>
+                <div style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <IconAlertTriangle />
-                {sosLoading ? 'Sending GPS Location...' : sosTriggered ? 'SOS SIGNAL ACTIVE & ACKNOWLEDGED' : 'DISPATCH INSTANT SOS BEACON'}
-              </button>
+                  gap: '6px',
+                  color: '#6ee7b7',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  marginBottom: '12px'
+                }}>
+                  <IconShield /> Safe Today, Wilder Tomorrow
+                </div>
+                
+                <h1 style={{ fontSize: '3rem', fontWeight: 800, color: '#ffffff', margin: '0 0 16px', lineHeight: 1.1 }}>
+                  Your Safety<br/><span style={{ color: '#34d399' }}>Our Priority</span>
+                </h1>
+                
+                <p style={{ color: '#d1fae5', fontSize: '0.95rem', margin: '0 0 28px', lineHeight: 1.6, maxWidth: '500px' }}>
+                  Real-time forest hazard advisories, instant GPS SOS distress dispatch, and direct incident reporting to Palamau Reserve Control.
+                </p>
+
+                {/* Big Prominent SOS Button */}
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={handleSOS}
+                    disabled={sosLoading}
+                    style={{
+                      background: sosTriggered ? '#16a34a' : '#ef4444',
+                      color: '#ffffff',
+                      fontSize: '0.9rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.03em',
+                      padding: '14px 28px',
+                      borderRadius: '30px',
+                      boxShadow: sosTriggered ? '0 4px 14px rgba(22, 163, 74, 0.35)' : '0 4px 14px rgba(239, 68, 68, 0.4)',
+                      border: 'none',
+                      cursor: sosLoading ? 'wait' : 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <IconAlertTriangle />
+                    {sosLoading ? 'Sending GPS...' : sosTriggered ? 'SOS SENT & ACKNOWLEDGED' : 'DISPATCH INSTANT SOS BEACON'}
+                  </button>
+                  <button
+                    style={{
+                      background: 'transparent',
+                      color: '#ffffff',
+                      fontSize: '0.9rem',
+                      fontWeight: 600,
+                      padding: '12px 24px',
+                      borderRadius: '30px',
+                      border: '2px solid rgba(255,255,255,0.3)',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    <IconFileText /> View Safety Guidelines
+                  </button>
+                </div>
+              </div>
+
+              {/* Right side quote */}
+              <div style={{ maxWidth: '280px', marginTop: '40px', paddingRight: '20px' }}>
+                <div style={{ fontSize: '1.2rem', fontStyle: 'italic', fontWeight: 600, color: '#ffffff', lineHeight: 1.4, marginBottom: '8px' }}>
+                  "Safe Visitors<br/>Help Wilder Forests."
+                </div>
+                <div style={{ color: '#a7f3d0', fontSize: '0.8rem', fontWeight: 500 }}>
+                  — Betla Eco-Companion
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Two Column Layout: Left (Alerts & Contacts), Right (Incident Form) */}
+          {/* Summary Cards Row */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
-            gap: '20px'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))',
+            gap: '16px',
+            marginBottom: '24px'
           }}>
-            {/* Left Column: Live Safety Alerts & Emergency Helplines */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {/* Active Safety Alerts Card Container */}
+            {/* Active Alerts Card */}
+            <div style={{
+              background: alerts.length > 0 ? '#fef2f2' : '#f0fdf4',
+              border: '1px solid',
+              borderColor: alerts.length > 0 ? '#fecaca' : '#bbf7d0',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{
+                  width: '48px', height: '48px', borderRadius: '50%',
+                  background: alerts.length > 0 ? '#fee2e2' : '#dcfce7',
+                  color: alerts.length > 0 ? '#dc2626' : '#16a34a',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <IconAlertTriangle />
+                </div>
+                <div>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111827', lineHeight: 1, marginBottom: '4px' }}>
+                    {alerts.length}
+                  </div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: alerts.length > 0 ? '#dc2626' : '#16a34a' }}>
+                    Active Alerts
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '2px' }}>
+                    In Reserve Zones
+                  </div>
+                </div>
+              </div>
+              <div style={{ color: alerts.length > 0 ? '#dc2626' : '#16a34a' }}>→</div>
+            </div>
+
+            {/* Helpline Card */}
+            <div style={{
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{
+                  width: '48px', height: '48px', borderRadius: '50%',
+                  background: '#dcfce7',
+                  color: '#16a34a',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <IconPhone />
+                </div>
+                <div>
+                  <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#111827', lineHeight: 1, marginBottom: '6px' }}>
+                    24/7
+                  </div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#374151' }}>
+                    Forest Helpline
+                  </div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#16a34a', marginTop: '2px' }}>
+                    +91 6562 222 019
+                  </div>
+                </div>
+              </div>
+              <div style={{ color: '#16a34a' }}>→</div>
+            </div>
+          </div>
+
+          {/* Main Layout Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))',
+            gap: '24px',
+            marginBottom: '32px'
+          }}>
+            {/* Left Column */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              
+              {/* Alerts List Box */}
               <div style={{
                 background: '#ffffff',
                 border: '1px solid #e5e7eb',
-                borderRadius: '12px',
-                padding: '20px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                borderRadius: '16px',
+                padding: '24px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                  <div style={{ color: '#15803d', display: 'flex' }}><IconBell /></div>
-                  <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-                    Live Reserve Safety Alerts
-                  </h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ color: '#ef4444', display: 'flex' }}><IconBell /></div>
+                    <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+                      Live Reserve Safety Alerts
+                    </h2>
+                  </div>
+                  <Link to="#" style={{ fontSize: '0.8rem', color: '#16a34a', fontWeight: 600, textDecoration: 'none' }}>View All →</Link>
                 </div>
 
                 {loadingAlerts ? (
-                  <div style={{ color: '#6b7280', fontSize: '0.875rem', padding: '12px 0' }}>
-                    Checking forest advisories...
-                  </div>
+                  <div style={{ color: '#6b7280', fontSize: '0.875rem', padding: '12px 0' }}>Checking advisories...</div>
                 ) : alerts.length === 0 ? (
-                  <div style={{
-                    background: '#f9fafb',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    color: '#6b7280',
-                    fontSize: '0.85rem'
-                  }}>
-                    No active safety alerts. All forest zones clear.
+                  <div style={{ color: '#6b7280', fontSize: '0.85rem', padding: '16px', background: '#f9fafb', borderRadius: '8px' }}>
+                    No active safety alerts. All zones clear.
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {alerts.map((alt) => (
-                      <div
-                        key={alt.id}
-                        style={{
-                          background: '#ffffff',
-                          border: '1px solid #e5e7eb',
-                          borderLeft: alt.severity === 'DANGER' || alt.severity === 'HIGH' ? '4px solid #ef4444' : alt.severity === 'WARNING' ? '4px solid #f59e0b' : '4px solid #10b981',
+                    {alerts.map((alt) => {
+                      // Determine visual styling based on severity logic matched to reference
+                      let colorMap = {
+                        bg: '#ffffff', border: '#e5e7eb', leftBorder: '#10b981',
+                        badgeBg: '#e6f4ea', badgeText: '#15803d', iconColor: '#15803d'
+                      };
+                      if (alt.severity === 'DANGER' || alt.severity === 'HIGH' || alt.severity === 'WARNING') {
+                        colorMap = {
+                          bg: '#ffffff', border: '#e5e7eb', leftBorder: '#ef4444',
+                          badgeBg: '#fef2f2', badgeText: '#dc2626', iconColor: '#3b82f6' // using blue for icon matching reference
+                        };
+                      } else if (alt.severity === 'ADVISORY' || alt.severity === 'INFO') {
+                        colorMap = {
+                          bg: '#ffffff', border: '#e5e7eb', leftBorder: '#f59e0b',
+                          badgeBg: '#fef3c7', badgeText: '#d97706', iconColor: '#4b5563'
+                        };
+                      }
+
+                      return (
+                        <div key={alt.id} style={{
+                          background: colorMap.bg,
+                          border: `1px solid ${colorMap.border}`,
+                          borderLeft: `4px solid ${colorMap.leftBorder}`,
                           borderRadius: '8px',
-                          padding: '14px',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
-                          <h4 style={{ color: '#111827', fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>
-                            {alt.title}
-                          </h4>
-                          <span style={{
-                            fontSize: '0.7rem',
-                            fontWeight: 700,
-                            padding: '2px 8px',
-                            borderRadius: '12px',
-                            background: alt.severity === 'DANGER' || alt.severity === 'HIGH' ? '#fef2f2' : alt.severity === 'WARNING' ? '#fef3c7' : '#e6f4ea',
-                            color: alt.severity === 'DANGER' || alt.severity === 'HIGH' ? '#dc2626' : alt.severity === 'WARNING' ? '#d97706' : '#15803d'
-                          }}>
-                            {alt.severity || 'NOTICE'}
-                          </span>
-                        </div>
-
-                        {alt.area && (
-                          <div style={{ fontSize: '0.75rem', color: '#15803d', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
-                            <IconMapPin /> Zone: {alt.area}
+                          padding: '16px',
+                          display: 'flex',
+                          gap: '16px',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
+                        }}>
+                          <div style={{ color: colorMap.iconColor, flexShrink: 0, marginTop: '2px' }}>
+                            {alt.severity === 'RESOLVED' ? <IconTrees /> : <IconAlertTriangle />}
                           </div>
-                        )}
-
-                        <p style={{ color: '#4b5563', fontSize: '0.825rem', lineHeight: 1.5, margin: 0 }}>
-                          {alt.message}
-                        </p>
-                      </div>
-                    ))}
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
+                              <h4 style={{ color: '#111827', fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>
+                                {alt.title}
+                              </h4>
+                              <span style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 700,
+                                padding: '4px 10px',
+                                borderRadius: '12px',
+                                background: colorMap.badgeBg,
+                                color: colorMap.badgeText,
+                                letterSpacing: '0.02em',
+                                textTransform: 'uppercase'
+                              }}>
+                                {alt.severity}
+                              </span>
+                            </div>
+                            
+                            {alt.area && (
+                              <div style={{ fontSize: '0.8rem', color: '#15803d', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                <IconMapPin /> Zone: {alt.area}
+                              </div>
+                            )}
+                            
+                            <p style={{ color: '#4b5563', fontSize: '0.85rem', lineHeight: 1.5, margin: 0 }}>
+                              {alt.message}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
 
-              {/* Emergency Contacts Card */}
+              {/* Forest Authority Helplines Box */}
               <div style={{
                 background: '#ffffff',
                 border: '1px solid #e5e7eb',
-                borderRadius: '12px',
-                padding: '20px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                borderRadius: '16px',
+                padding: '24px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-                  <div style={{ color: '#15803d', display: 'flex' }}><IconPhone /></div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-                    Forest Authority Helplines
-                  </h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ color: '#15803d', display: 'flex' }}><IconPhone /></div>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+                      Forest Authority Helplines
+                    </h3>
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: '#16a34a', fontWeight: 600 }}>24/7 Support</div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.85rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '10px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#374151' }}>Betla Range Control Desk</span>
-                    <strong style={{ color: '#15803d', fontFamily: 'monospace', fontSize: '0.9rem' }}>+91 (6562) 222-019</strong>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px' }}>
+                  <div style={{ borderRight: '1px solid #f3f4f6', paddingRight: '16px' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#111827', marginBottom: '6px' }}>Betla Range Control Desk</div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#15803d', marginBottom: '4px' }}>+91 6562 222 019</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(24/7)</div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '10px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#374151' }}>Palamau Tiger Reserve Ranger</span>
-                    <strong style={{ color: '#15803d', fontFamily: 'monospace', fontSize: '0.9rem' }}>+91 94311 08842</strong>
+                  <div style={{ borderRight: '1px solid #f3f4f6', paddingRight: '16px' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#111827', marginBottom: '6px' }}>Forest Emergency</div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#15803d', marginBottom: '4px' }}>+91 94311 08842</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(24/7)</div>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ color: '#374151' }}>Medical & Ambulance SOS</span>
-                    <strong style={{ color: '#dc2626', fontFamily: 'monospace', fontSize: '0.95rem' }}>108 / 112</strong>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#111827', marginBottom: '6px' }}>Medical & Rescue</div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#15803d', marginBottom: '4px' }}>108 / 112</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>(24/7)</div>
                   </div>
                 </div>
               </div>
+
             </div>
 
             {/* Right Column: Incident Report Form */}
             <div style={{
               background: '#ffffff',
               border: '1px solid #e5e7eb',
-              borderRadius: '12px',
+              borderRadius: '16px',
               padding: '24px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
               display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
+              flexDirection: 'column'
             }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <div style={{ color: '#15803d', display: 'flex' }}><IconFileText /></div>
-                  <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-                    Report a Forest Incident
-                  </h2>
-                </div>
-                <p style={{ fontSize: '0.825rem', color: '#6b7280', margin: '0 0 18px', lineHeight: 1.4 }}>
-                  Report wildlife sightings, road obstructions, fallen trees, or safety hazards directly to forest officers.
-                </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                <div style={{ color: '#15803d', display: 'flex' }}><IconFileText /></div>
+                <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+                  Report a Forest Incident
+                </h2>
+              </div>
+              <p style={{ fontSize: '0.85rem', color: '#4b5563', margin: '0 0 24px', lineHeight: 1.5 }}>
+                Report wildlife sightings, road obstructions, fallen trees, or safety hazards directly to forest officers.
+              </p>
 
-                <form onSubmit={handleSubmitIncident} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '5px' }} htmlFor="inc-type">
+              <form onSubmit={handleSubmitIncident} style={{ display: 'flex', flexDirection: 'column', gap: '20px', flex: 1 }}>
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                  <div style={{ flex: '1 1 min-content', minWidth: '160px' }}>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '8px' }} htmlFor="inc-type">
                       Incident Category
                     </label>
                     <select
                       id="inc-type"
                       style={{
-                        width: '100%',
-                        padding: '9px 12px',
-                        border: '1px solid #d1d5db',
-                        borderRadius: '8px',
-                        fontSize: '0.85rem',
-                        color: '#111827',
-                        background: '#ffffff',
-                        outline: 'none'
+                        width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '8px',
+                        fontSize: '0.85rem', color: '#111827', background: '#ffffff', outline: 'none'
                       }}
                       value={incidentForm.type}
                       onChange={(e) => setIncidentForm({ ...incidentForm, type: e.target.value })}
@@ -537,21 +684,15 @@ export function SafetyHubPage() {
                     </select>
                   </div>
 
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '5px' }} htmlFor="inc-priority">
+                  <div style={{ flex: '1 1 min-content', minWidth: '160px' }}>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '8px' }} htmlFor="inc-priority">
                       Priority Level
                     </label>
                     <select
                       id="inc-priority"
                       style={{
-                        width: '100%',
-                        padding: '9px 12px',
-                        border: '1px solid #d1d5db',
-                        borderRadius: '8px',
-                        fontSize: '0.85rem',
-                        color: '#111827',
-                        background: '#ffffff',
-                        outline: 'none'
+                        width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '8px',
+                        fontSize: '0.85rem', color: '#111827', background: '#ffffff', outline: 'none'
                       }}
                       value={incidentForm.priority}
                       onChange={(e) => setIncidentForm({ ...incidentForm, priority: e.target.value })}
@@ -561,84 +702,84 @@ export function SafetyHubPage() {
                       <option value="HIGH">High (Urgent Response Needed)</option>
                     </select>
                   </div>
+                </div>
 
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '5px' }} htmlFor="inc-loc">
-                      Forest Location / Landmark
-                    </label>
-                    <input
-                      id="inc-loc"
-                      type="text"
-                      placeholder="e.g. Near Kechki Bridge, Km 4 Watchtower"
-                      style={{
-                        width: '100%',
-                        padding: '9px 12px',
-                        border: '1px solid #d1d5db',
-                        borderRadius: '8px',
-                        fontSize: '0.85rem',
-                        color: '#111827',
-                        background: '#ffffff',
-                        outline: 'none',
-                        boxSizing: 'border-box'
-                      }}
-                      value={incidentForm.location}
-                      onChange={(e) => setIncidentForm({ ...incidentForm, location: e.target.value })}
-                    />
-                  </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '8px' }} htmlFor="inc-loc">
+                    Location / Landmark
+                  </label>
+                  <input
+                    id="inc-loc"
+                    type="text"
+                    placeholder="e.g. Near Jhirna Zone, Watch Tower Road, etc."
+                    style={{
+                      width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '8px',
+                      fontSize: '0.85rem', color: '#111827', background: '#ffffff', outline: 'none', boxSizing: 'border-box'
+                    }}
+                    value={incidentForm.location}
+                    onChange={(e) => setIncidentForm({ ...incidentForm, location: e.target.value })}
+                  />
+                </div>
 
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '5px' }} htmlFor="inc-desc">
-                      Detailed Description
-                    </label>
-                    <textarea
-                      id="inc-desc"
-                      rows={4}
-                      placeholder="Describe what you observed..."
-                      style={{
-                        width: '100%',
-                        padding: '9px 12px',
-                        border: '1px solid #d1d5db',
-                        borderRadius: '8px',
-                        fontSize: '0.85rem',
-                        color: '#111827',
-                        background: '#ffffff',
-                        outline: 'none',
-                        resize: 'vertical',
-                        boxSizing: 'border-box'
-                      }}
-                      value={incidentForm.description}
-                      onChange={(e) => setIncidentForm({ ...incidentForm, description: e.target.value })}
-                    />
-                  </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '8px' }} htmlFor="inc-desc">
+                    Short Description
+                  </label>
+                  <textarea
+                    id="inc-desc"
+                    rows={4}
+                    placeholder="Describe what you saw or experienced..."
+                    style={{
+                      width: '100%', padding: '10px 14px', border: '1px solid #d1d5db', borderRadius: '8px',
+                      fontSize: '0.85rem', color: '#111827', background: '#ffffff', outline: 'none', resize: 'vertical', boxSizing: 'border-box'
+                    }}
+                    value={incidentForm.description}
+                    onChange={(e) => setIncidentForm({ ...incidentForm, description: e.target.value })}
+                  />
+                </div>
 
+                <div style={{ display: 'flex', gap: '12px', marginTop: 'auto', paddingTop: '10px' }}>
                   <button
                     type="submit"
                     disabled={submittingIncident}
-                    className="sample1-hero-btn"
                     style={{
-                      width: '100%',
-                      padding: '10px',
-                      fontSize: '0.85rem',
-                      marginTop: '4px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px'
+                      background: '#064e3b', color: '#ffffff', fontSize: '0.9rem', fontWeight: 600,
+                      padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: submittingIncident ? 'wait' : 'pointer',
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flex: 1
                     }}
                   >
                     <IconFileText />
-                    {submittingIncident ? 'Submitting Report...' : 'Submit Incident Report'}
+                    {submittingIncident ? 'Submitting...' : 'Submit Incident Report'}
                   </button>
-                </form>
-              </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="sample1-footer">
-          Betla Eco-Companion | Department of Forest, Jharkhand
-        </footer>
+        {/* Conservation Footer Banner */}
+        <div style={{
+          background: '#064e3b',
+          color: '#ffffff',
+          padding: '24px 40px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '20px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ color: '#10b981', display: 'flex' }}><IconLeaf /></div>
+            <div>
+              <div style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '4px' }}>Together for a Safer Betla</div>
+              <div style={{ fontSize: '0.8rem', color: '#a7f3d0' }}>Betla Eco-Companion | Department of Forest, Jharkhand</div>
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '0.85rem', color: '#a7f3d0', fontStyle: 'italic', fontWeight: 600 }}>Explore Responsibly</div>
+            <div style={{ fontSize: '0.85rem', color: '#a7f3d0', fontStyle: 'italic', fontWeight: 600 }}>Preserve Eternally</div>
+          </div>
+        </div>
       </div>
     </div>
   );

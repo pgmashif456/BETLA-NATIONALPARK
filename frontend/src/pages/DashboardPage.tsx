@@ -246,6 +246,15 @@ export default function DashboardPage() {
       {/* --- Main Area --- */}
       <div className="sample1-main-wrapper">
         <header className="sample1-header">
+          {/* Location Context Breadcrumb */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: '#0f3e28', fontWeight: 600 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#15803d' }}>
+              <IconLeaf /> Betla National Park &gt;
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#4b5563', fontWeight: 500, fontSize: '0.8rem' }}>
+              <IconMapPin /> Latehar, Jharkhand
+            </span>
+          </div>
           <div className="sample1-user-controls">
             <button className="sample1-icon-btn" title="Notifications" onClick={() => navigate('/safety-hub')}>
               <IconBell />

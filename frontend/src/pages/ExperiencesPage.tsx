@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { contentApi } from '../api/client';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import safariHeroAsset from '../assets/safari_hero.jpg';
 
 interface ExperienceItem {
   id: string;
@@ -14,7 +15,15 @@ interface ExperienceItem {
   destination?: { name: string };
 }
 
-// Clean inline SVG Icons matching Sample-1 visual language
+// Exactly 4 Curated Betla Forest / Safari Hero Images (Matching Master Visual Reference)
+const safariHeroImages = [
+  safariHeroAsset, // 1. Reference Scene: Bengal Tiger on sunlit dirt trail with safari jeep in background
+  'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=1600&q=80', // 2. Forest + Wildlife: Asian elephants in sunlit sal forest glade
+  'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1600&q=80', // 3. Forest Safari: Open jeep navigating jungle trail under morning sunbeams
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80', // 4. Nature Experience: Misty forest river valley and green Betla hill ranges
+];
+
+// Clean inline SVG Vector Icons matching the Master Visual Language
 const IconLeaf = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
@@ -46,7 +55,7 @@ const IconCar = () => (
 );
 
 const IconMapPin = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
     <circle cx="12" cy="10" r="3"/>
   </svg>
@@ -92,11 +101,111 @@ const IconBell = () => (
 );
 
 const IconClock = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
     <polyline points="12 6 12 12 16 14"/>
   </svg>
 );
+
+const IconUsers = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </svg>
+);
+
+const IconCalendar = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+    <line x1="16" y1="2" x2="16" y2="6"/>
+    <line x1="8" y1="2" x2="8" y2="6"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>
+);
+
+const IconSearch = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+);
+
+const IconGrid = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="7"/>
+    <rect x="14" y="3" width="7" height="7"/>
+    <rect x="14" y="14" width="7" height="7"/>
+    <rect x="3" y="14" width="7" height="7"/>
+  </svg>
+);
+
+const IconList = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="8" y1="6" x2="21" y2="6"/>
+    <line x1="8" y1="12" x2="21" y2="12"/>
+    <line x1="8" y1="18" x2="21" y2="18"/>
+    <line x1="3" y1="6" x2="3.01" y2="6"/>
+    <line x1="3" y1="12" x2="3.01" y2="12"/>
+    <line x1="3" y1="18" x2="3.01" y2="18"/>
+  </svg>
+);
+
+const IconHeart = ({ filled }: { filled: boolean }) => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill={filled ? '#ef4444' : 'none'} stroke={filled ? '#ef4444' : 'currentColor'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+  </svg>
+);
+
+// High-definition Safari Image Mappings matching Reference
+const safariImageMap: Record<string, string> = {
+  'jeep': 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80',
+  'tiger': 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=800&q=80',
+  'elephant': 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&w=800&q=80',
+  'nature': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+  'walk': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+  'bird': 'https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=800&q=80',
+  'night': 'https://images.unsplash.com/photo-1511497584788-87676104235f?auto=format&fit=crop&w=800&q=80',
+  'default': 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80',
+};
+
+const getSafariImage = (name: string, catName?: string): string => {
+  const text = (name + ' ' + (catName || '')).toLowerCase();
+  if (text.includes('jeep') || text.includes('tiger') || text.includes('wildlife')) return safariImageMap['jeep'];
+  if (text.includes('elephant')) return safariImageMap['elephant'];
+  if (text.includes('walk') || text.includes('trek') || text.includes('nature')) return safariImageMap['nature'];
+  if (text.includes('bird')) return safariImageMap['bird'];
+  if (text.includes('night')) return safariImageMap['night'];
+  return safariImageMap['default'];
+};
+
+const getBadgeForExperience = (index: number, name: string) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('jeep') || lower.includes('tiger') || index === 0) {
+    return { label: '🔥 Most Popular', className: 'popular' };
+  }
+  if (lower.includes('elephant') || index === 1) {
+    return { label: '⭐ Unique Experience', className: 'unique' };
+  }
+  if (lower.includes('walk') || lower.includes('nature') || index === 2) {
+    return { label: '🏞️ Scenic Views', className: 'scenic' };
+  }
+  if (lower.includes('bird') || index === 3) {
+    return { label: '🦜 For Bird Lovers', className: 'birds' };
+  }
+  return { label: '🌲 Guided Tour', className: 'scenic' };
+};
+
+const getIconForExperience = (name: string) => {
+  const lower = name.toLowerCase();
+  if (lower.includes('jeep') || lower.includes('tiger')) return '🚙';
+  if (lower.includes('elephant')) return '🐘';
+  if (lower.includes('walk') || lower.includes('trail') || lower.includes('nature')) return '🥾';
+  if (lower.includes('bird')) return '🔭';
+  if (lower.includes('night')) return '🌙';
+  return '🐾';
+};
 
 export function ExperiencesPage() {
   const { user } = useAuth();
@@ -106,6 +215,23 @@ export function ExperiencesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedExperience, setSelectedExperience] = useState<ExperienceItem | null>(null);
+
+  // Hero auto-rotating carousel state (4-5s interval)
+  const [currentHeroIndex, setCurrentHeroIndex] = useState<number>(0);
+
+  // Filter Bar state
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedPeople, setSelectedPeople] = useState<string>('1');
+  const [selectedSafariType, setSelectedSafariType] = useState<string>('ALL');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentHeroIndex((prev) => (prev + 1) % safariHeroImages.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [currentHeroIndex]);
 
   useEffect(() => {
     let isMounted = true;
@@ -132,13 +258,32 @@ export function ExperiencesPage() {
     };
   }, []);
 
-  const filtered = selectedCategory === 'ALL'
-    ? experiences
-    : experiences.filter((e) => e.category?.slug === selectedCategory || e.category?.name === selectedCategory);
+  const toggleFavorite = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
+    toast.success(favorites[id] ? 'Removed from saved experiences' : 'Saved to wishlist!');
+  };
+
+  const handleSearchSafaris = () => {
+    if (selectedSafariType !== 'ALL') {
+      setSelectedCategory(selectedSafariType);
+    }
+    const el = document.getElementById('safaris-grid-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    toast.success('Showing available safaris for selected criteria');
+  };
+
+  const filtered = experiences.filter((e) => {
+    if (selectedCategory !== 'ALL') {
+      const match = e.category?.slug === selectedCategory || e.category?.name === selectedCategory || e.name.toLowerCase().includes(selectedCategory.toLowerCase());
+      if (!match) return false;
+    }
+    return true;
+  });
 
   return (
     <div className="sample1-layout">
-      {/* --- Left Compact Sidebar (Sample-1 1:1 Match) --- */}
+      {/* --- Left Sidebar (1:1 Approved Design) --- */}
       <aside className="sample1-sidebar">
         <div>
           <div className="sample1-brand">
@@ -192,11 +337,20 @@ export function ExperiencesPage() {
 
       {/* --- Main Content Area --- */}
       <div className="sample1-main-wrapper">
-        {/* Header Bar */}
+        {/* Top Header matching reference */}
         <header className="sample1-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: '#111827', fontWeight: 600 }}>
+            <span>🐾 Betla National Park</span>
+            <span style={{ color: '#9ca3af' }}>&gt;</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#059669', fontSize: '0.78rem' }}>
+              <IconMapPin /> Latehar, Jharkhand
+            </span>
+          </div>
+
           <div className="sample1-user-controls">
             <button className="sample1-icon-btn" title="Notifications" onClick={() => navigate('/safety-hub')}>
               <IconBell />
+              <span style={{ position: 'absolute', top: 0, right: 0, width: 7, height: 7, background: '#ef4444', borderRadius: '50%' }}></span>
             </button>
 
             {user ? (
@@ -224,66 +378,236 @@ export function ExperiencesPage() {
 
         {/* Safaris Content Container */}
         <div className="sample1-container">
-          {/* Header Banner */}
-          <div style={{
-            background: '#ffffff',
-            border: '1px solid #e5e7eb',
-            borderRadius: '12px',
-            padding: '24px',
-            marginBottom: '20px',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: '#e6f4ea',
-              color: '#15803d',
-              padding: '4px 14px',
-              borderRadius: '20px',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-              marginBottom: '10px'
-            }}>
-              <IconCar /> Wild Safaris & Eco Treks
-            </div>
-            <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#111827', margin: '0 0 6px 0' }}>
-              Experience Palamau Tiger Reserve
-            </h1>
-            <p style={{ color: '#4b5563', fontSize: '0.88rem', maxWidth: '680px', margin: '0 auto 16px auto', lineHeight: 1.5 }}>
-              Book certified wildlife jeep safaris, elephant trail walks, waterfall treks, and indigenous tribal heritage tours in Betla.
-            </p>
+          {/* --- Master Safari Hero Banner with 4 Auto-Rotating Crossfade Slides --- */}
+          <div className="safari-hero" style={{ position: 'relative', overflow: 'hidden' }}>
+            {/* 4 Background Crossfade Slides */}
+            {safariHeroImages.map((imgSrc, idx) => (
+              <div
+                key={idx}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `linear-gradient(to right, rgba(9, 26, 16, 0.94) 0%, rgba(9, 26, 16, 0.70) 52%, rgba(9, 26, 16, 0.32) 100%), url(${imgSrc})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: idx === 0 ? 'center right' : 'center',
+                  opacity: currentHeroIndex === idx ? 1 : 0,
+                  transition: 'opacity 0.85s ease-in-out',
+                  pointerEvents: 'none',
+                  zIndex: 0,
+                }}
+              />
+            ))}
 
-            {/* Category Filter Pills */}
-            <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <div className="safari-hero-content" style={{ position: 'relative', zIndex: 1 }}>
+              <div className="safari-hero-tag">SAFARIS & BOOKING</div>
+              <h1 className="safari-hero-title">
+                Into the Wild <br />
+                With <span>a Purpose</span>
+              </h1>
+              <div className="safari-hero-sub">
+                Guided safaris, nature trails and unique forest experiences in the heart of Betla National Park.
+              </div>
+
+              {/* 3 Trust / Feature Badges */}
+              <div className="safari-hero-badges">
+                <div className="safari-hero-badge">
+                  <div className="safari-hero-badge-icon"><IconLeaf /></div>
+                  <div>
+                    <div className="safari-hero-badge-title">Authentic Experiences</div>
+                    <div className="safari-hero-badge-sub">Led by experts</div>
+                  </div>
+                </div>
+
+                <div className="safari-hero-badge">
+                  <div className="safari-hero-badge-icon"><IconShield /></div>
+                  <div>
+                    <div className="safari-hero-badge-title">Safe & Secure</div>
+                    <div className="safari-hero-badge-sub">Your safety first</div>
+                  </div>
+                </div>
+
+                <div className="safari-hero-badge">
+                  <div className="safari-hero-badge-icon"><IconUsers /></div>
+                  <div>
+                    <div className="safari-hero-badge-title">Support Conservation</div>
+                    <div className="safari-hero-badge-sub">Tourism for a greener future</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Quote & Clickable Carousel Dots */}
+            <div className="safari-hero-right" style={{ position: 'relative', zIndex: 1 }}>
+              <div className="safari-hero-quote">
+                "The forest is not a place to visit, it is a home to respect."
+                <div className="safari-hero-quote-author">— Betla National Park</div>
+              </div>
+              <div className="safari-hero-dots">
+                {safariHeroImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentHeroIndex(idx)}
+                    className={`safari-hero-dot ${currentHeroIndex === idx ? 'active' : ''}`}
+                    aria-label={`View slide ${idx + 1}`}
+                    title={`View slide ${idx + 1}`}
+                    style={{ border: 'none', padding: 0, cursor: 'pointer' }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* --- Horizontal Search & Filter Bar --- */}
+          <div className="safari-search-bar">
+            {/* Field 1: Select Date */}
+            <div className="safari-search-field">
+              <div className="safari-search-icon"><IconCalendar /></div>
+              <div className="safari-search-input-group">
+                <span className="safari-search-label">Select Date</span>
+                <input
+                  type="date"
+                  className="safari-search-input"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Field 2: No. of People */}
+            <div className="safari-search-field">
+              <div className="safari-search-icon"><IconUsers /></div>
+              <div className="safari-search-input-group">
+                <span className="safari-search-label">No. of People</span>
+                <select
+                  className="safari-search-select"
+                  value={selectedPeople}
+                  onChange={(e) => setSelectedPeople(e.target.value)}
+                >
+                  <option value="1">1 Person</option>
+                  <option value="2">2 People</option>
+                  <option value="3-4">3-4 People</option>
+                  <option value="5-8">5-8 People (Group)</option>
+                  <option value="9+">9+ People (Large Tour)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Field 3: Safari Type */}
+            <div className="safari-search-field">
+              <div className="safari-search-icon"><IconCar /></div>
+              <div className="safari-search-input-group">
+                <span className="safari-search-label">Safari Type</span>
+                <select
+                  className="safari-search-select"
+                  value={selectedSafariType}
+                  onChange={(e) => setSelectedSafariType(e.target.value)}
+                >
+                  <option value="ALL">All Safaris</option>
+                  <option value="jeep">Jeep Safari</option>
+                  <option value="elephant">Elephant Safari</option>
+                  <option value="nature">Nature Walk</option>
+                  <option value="bird">Bird Watching</option>
+                  <option value="night">Night Safari</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Primary Action Button */}
+            <button className="safari-search-btn" onClick={handleSearchSafaris}>
+              <IconSearch /> Find Safaris →
+            </button>
+          </div>
+
+          {/* --- Category Filter Tabs & Header Row --- */}
+          <div className="safari-filter-row">
+            <div className="safari-pills">
               <button
                 onClick={() => setSelectedCategory('ALL')}
-                className={selectedCategory === 'ALL' ? 'sample1-hero-btn' : 'sample1-btn-secondary'}
-                style={{ fontSize: '0.78rem', padding: '6px 14px' }}
+                className={`safari-pill ${selectedCategory === 'ALL' ? 'active' : ''}`}
               >
-                All Experiences
+                All Safaris
               </button>
+              <button
+                onClick={() => setSelectedCategory('jeep')}
+                className={`safari-pill ${selectedCategory === 'jeep' ? 'active' : ''}`}
+              >
+                Jeep Safari
+              </button>
+              <button
+                onClick={() => setSelectedCategory('elephant')}
+                className={`safari-pill ${selectedCategory === 'elephant' ? 'active' : ''}`}
+              >
+                Elephant Safari
+              </button>
+              <button
+                onClick={() => setSelectedCategory('nature')}
+                className={`safari-pill ${selectedCategory === 'nature' ? 'active' : ''}`}
+              >
+                Nature Walk
+              </button>
+              <button
+                onClick={() => setSelectedCategory('bird')}
+                className={`safari-pill ${selectedCategory === 'bird' ? 'active' : ''}`}
+              >
+                Bird Watching
+              </button>
+              <button
+                onClick={() => setSelectedCategory('night')}
+                className={`safari-pill ${selectedCategory === 'night' ? 'active' : ''}`}
+              >
+                Night Safari
+              </button>
+
+              {/* Dynamic Categories from API */}
               {categories.map((cat) => {
                 const catKey = cat.slug || cat.name;
+                const standardKeys = ['all', 'jeep', 'elephant', 'nature', 'bird', 'night'];
+                if (standardKeys.includes(catKey.toLowerCase())) return null;
                 const isActive = selectedCategory === catKey;
                 return (
                   <button
                     key={cat.id || cat.slug}
                     onClick={() => setSelectedCategory(catKey)}
-                    className={isActive ? 'sample1-hero-btn' : 'sample1-btn-secondary'}
-                    style={{ fontSize: '0.78rem', padding: '6px 14px' }}
+                    className={`safari-pill ${isActive ? 'active' : ''}`}
                   >
                     {cat.name}
                   </button>
                 );
               })}
             </div>
+
+            {/* Right: View Switcher */}
+            <div className="safari-view-toggle">
+              <button
+                className={`safari-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                onClick={() => setViewMode('grid')}
+                title="Grid View"
+              >
+                <IconGrid /> Grid View
+              </button>
+              <button
+                className={`safari-view-btn ${viewMode === 'list' ? 'active' : ''}`}
+                onClick={() => setViewMode('list')}
+                title="List View"
+              >
+                <IconList /> List View
+              </button>
+            </div>
           </div>
 
-          {/* Content Section */}
+          {/* Section Heading with Handwritten Doodle */}
+          <div className="safari-section-header" id="safaris-grid-section">
+            <div>
+              <h2 className="safari-section-title">Popular Safaris & Experiences</h2>
+              <p className="safari-section-sub">Choose from our curated safari experiences</p>
+            </div>
+            <div className="safari-doodle-text">
+              ✨ Same Forest, A Deeper Experience 🌿
+            </div>
+          </div>
+
+          {/* --- Experience Cards Grid / List --- */}
           {loading ? (
             <div style={{ textAlign: 'center', padding: '48px', color: '#6b7280', fontSize: '0.9rem' }}>
               Loading wild experiences...
@@ -295,96 +619,127 @@ export function ExperiencesPage() {
               borderRadius: '12px',
               padding: '48px 24px',
               textAlign: 'center',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              marginBottom: '24px'
             }}>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px', color: '#10b981' }}>
                 <IconTrees />
               </div>
               <h3 style={{ color: '#111827', fontSize: '1.15rem', fontWeight: 700, marginBottom: '6px' }}>
-                No Experiences Published Yet
+                No Safaris Found for Selected Category
               </h3>
-              <p style={{ color: '#6b7280', fontSize: '0.85rem' }}>
-                Check back soon for new seasonal safari schedules and guided walks.
+              <p style={{ color: '#6b7280', fontSize: '0.85rem', marginBottom: '14px' }}>
+                Try selecting "All Safaris" to explore all available experiences in Betla.
               </p>
+              <button className="safari-pill active" onClick={() => setSelectedCategory('ALL')}>
+                Reset Filters
+              </button>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '16px', marginBottom: '20px' }}>
-              {filtered.map((exp) => (
-                <div
-                  key={exp.id}
-                  style={{
-                    background: '#ffffff',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '12px',
-                    padding: '20px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                      <span style={{
-                        background: '#e6f4ea',
-                        color: '#15803d',
-                        padding: '3px 10px',
-                        borderRadius: '16px',
-                        fontSize: '0.72rem',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.03em'
-                      }}>
-                        {exp.category?.name || 'Wild Safari'}
-                      </span>
-                      {exp.price && (
-                        <span style={{ fontSize: '1.15rem', fontWeight: 800, color: '#15803d' }}>
-                          ₹{exp.price}
-                        </span>
-                      )}
+            <div className={viewMode === 'grid' ? 'safari-grid' : ''} style={viewMode === 'list' ? { display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' } : {}}>
+              {filtered.map((exp, index) => {
+                const badge = getBadgeForExperience(index, exp.name);
+                const icon = getIconForExperience(exp.name);
+                const imgSrc = getSafariImage(exp.name, exp.category?.name);
+                const isFavorite = !!favorites[exp.id];
+
+                return (
+                  <div key={exp.id} className="safari-card" style={viewMode === 'list' ? { flexDirection: 'row', flexWrap: 'wrap' } : {}}>
+                    {/* Card Image Area with Badge & Heart */}
+                    <div className="safari-card-img-wrap" style={viewMode === 'list' ? { width: '240px', height: '180px' } : {}}>
+                      <img src={imgSrc} alt={exp.name} className="safari-card-img" />
+                      <div className={`safari-card-badge ${badge.className}`}>
+                        {badge.label}
+                      </div>
+                      <button
+                        className={`safari-card-heart ${isFavorite ? 'liked' : ''}`}
+                        onClick={(e) => toggleFavorite(exp.id, e)}
+                        title={isFavorite ? 'Remove from wishlist' : 'Save to wishlist'}
+                      >
+                        <IconHeart filled={isFavorite} />
+                      </button>
                     </div>
 
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#111827', margin: '0 0 6px 0' }}>
-                      {exp.name}
-                    </h3>
-
-                    {exp.destination && (
-                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', color: '#15803d', fontWeight: 600, marginBottom: '10px' }}>
-                        <IconMapPin /> {exp.destination.name}
+                    {/* Card Body */}
+                    <div className="safari-card-body" style={viewMode === 'list' ? { flex: 1, minWidth: '260px' } : {}}>
+                      <div className="safari-card-header">
+                        <div className="safari-card-icon">{icon}</div>
+                        <h3 className="safari-card-title">{exp.name}</h3>
                       </div>
-                    )}
 
-                    <p style={{ fontSize: '0.84rem', color: '#4b5563', lineHeight: 1.5, margin: '0 0 16px 0' }}>
-                      {exp.description || 'Embark on a guided eco-tour through dense sal forests with expert forest guards.'}
-                    </p>
-                  </div>
+                      <p className="safari-card-desc">
+                        {exp.description || 'Explore deep into the forest with expert guides and certified naturalists.'}
+                      </p>
 
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingTop: '14px',
-                    borderTop: '1px solid #f3f4f6',
-                    marginTop: 'auto'
-                  }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', color: '#6b7280', fontWeight: 500 }}>
-                      <IconClock /> {exp.duration || '2 - 3 Hours'}
-                    </span>
-                    <button
-                      onClick={() => setSelectedExperience(exp)}
-                      className="sample1-hero-btn"
-                      style={{ fontSize: '0.78rem', padding: '6px 14px' }}
-                    >
-                      View Details & Booking
-                    </button>
+                      {/* Metadata Row */}
+                      <div className="safari-card-meta">
+                        <div className="safari-card-meta-item">
+                          <IconClock /> <span>{exp.duration || '2-3 Hours'}</span>
+                        </div>
+                        <div className="safari-card-meta-item">
+                          <IconUsers /> <span>{exp.name.toLowerCase().includes('jeep') ? '1-6 People' : '1-4 People'}</span>
+                        </div>
+                      </div>
+
+                      {/* Card Pricing & Booking Action */}
+                      <div className="safari-card-footer">
+                        <div className="safari-card-price-group">
+                          <span className="safari-card-price">
+                            ₹{exp.price ? exp.price.toLocaleString('en-IN') : (exp.name.toLowerCase().includes('jeep') ? '2,500' : '1,200')}
+                          </span>
+                          <span className="safari-card-price-unit">
+                            {exp.name.toLowerCase().includes('jeep') ? 'per vehicle' : 'per person'}
+                          </span>
+                        </div>
+
+                        <button
+                          className="safari-card-btn"
+                          onClick={() => setSelectedExperience(exp)}
+                        >
+                          Book Now →
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
-          {/* Modal Detail View */}
+          {/* --- Bottom Trust & Conservation Banner (1:1 from Reference) --- */}
+          <div className="safari-trust-banner">
+            <div className="safari-trust-items">
+              <div className="safari-trust-item">
+                <div className="safari-trust-icon-box"><IconLeaf /></div>
+                <div>
+                  <div className="safari-trust-title">Trusted by Thousands</div>
+                  <div className="safari-trust-sub">Memorable & safe experiences</div>
+                </div>
+              </div>
+
+              <div className="safari-trust-item">
+                <div className="safari-trust-icon-box"><IconTrees /></div>
+                <div>
+                  <div className="safari-trust-title">Support Local Communities</div>
+                  <div className="safari-trust-sub">Responsible tourism</div>
+                </div>
+              </div>
+
+              <div className="safari-trust-item">
+                <div className="safari-trust-icon-box"><IconShield /></div>
+                <div>
+                  <div className="safari-trust-title">Contribute to Conservation</div>
+                  <div className="safari-trust-sub">Every visit makes a difference</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="safari-trust-tagline">
+              Explore Today, Preserve Tomorrow 🌿
+            </div>
+          </div>
+
+          {/* Modal Detail & Booking Reservation Dialog */}
           {selectedExperience && (
             <div
               style={{
@@ -401,37 +756,44 @@ export function ExperiencesPage() {
                 justifyContent: 'center',
                 padding: '20px',
               }}
+              onClick={() => setSelectedExperience(null)}
             >
-              <div style={{
-                background: '#ffffff',
-                maxWidth: '540px',
-                width: '100%',
-                borderRadius: '14px',
-                padding: '24px',
-                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                border: '1px solid #e5e7eb'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <div
+                style={{
+                  background: '#ffffff',
+                  maxWidth: '520px',
+                  width: '100%',
+                  borderRadius: '16px',
+                  padding: '26px',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                  border: '1px solid #e5e7eb',
+                  position: 'relative'
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <span style={{
                     background: '#e6f4ea',
                     color: '#15803d',
-                    padding: '3px 10px',
-                    borderRadius: '16px',
-                    fontSize: '0.75rem',
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    fontSize: '0.74rem',
                     fontWeight: 700,
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em'
                   }}>
-                    {selectedExperience.category?.name || 'Safari'}
+                    {selectedExperience.category?.name || 'Safari Experience'}
                   </span>
                   <button
                     onClick={() => setSelectedExperience(null)}
                     style={{ background: 'transparent', border: 'none', fontSize: '1.2rem', color: '#6b7280', cursor: 'pointer', padding: '4px' }}
+                    title="Close"
                   >
                     ✕
                   </button>
                 </div>
 
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#111827', margin: '0 0 6px 0' }}>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111827', margin: '0 0 6px 0', fontFamily: 'var(--font-heading, sans-serif)' }}>
                   {selectedExperience.name}
                 </h2>
 
@@ -441,37 +803,50 @@ export function ExperiencesPage() {
                   </div>
                 )}
 
-                <p style={{ color: '#4b5563', lineHeight: 1.6, fontSize: '0.88rem', margin: '0 0 18px 0' }}>
-                  {selectedExperience.description || 'Experience the pristine biodiversity of Betla with certified local trackers.'}
+                <p style={{ color: '#4b5563', lineHeight: 1.6, fontSize: '0.86rem', margin: '0 0 18px 0' }}>
+                  {selectedExperience.description || 'Experience the pristine biodiversity of Betla National Park with certified forest guides, naturalists, and authorized eco-vehicles.'}
                 </p>
 
                 <div style={{ background: '#f9fafb', padding: '14px 16px', borderRadius: '10px', border: '1px solid #e5e7eb', marginBottom: '20px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
                     <span style={{ color: '#6b7280' }}>Duration:</span>
-                    <strong style={{ color: '#111827' }}>{selectedExperience.duration || '2.5 Hours'}</strong>
+                    <strong style={{ color: '#111827' }}>{selectedExperience.duration || '2 - 3 Hours'}</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                    <span style={{ color: '#6b7280' }}>Eco Permit Fee:</span>
-                    <strong style={{ color: '#15803d', fontSize: '0.95rem' }}>₹{selectedExperience.price || '450'} per visitor</strong>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
+                    <span style={{ color: '#6b7280' }}>Selected Guests:</span>
+                    <strong style={{ color: '#111827' }}>{selectedPeople} Person(s)</strong>
+                  </div>
+                  {selectedDate && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
+                      <span style={{ color: '#6b7280' }}>Date of Safari:</span>
+                      <strong style={{ color: '#111827' }}>{selectedDate}</strong>
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', borderTop: '1px solid #e5e7eb', paddingTop: '8px', marginTop: '4px' }}>
+                    <span style={{ color: '#374151', fontWeight: 600 }}>Total Permit & Vehicle Fee:</span>
+                    <strong style={{ color: '#059669', fontSize: '1.05rem', fontWeight: 800 }}>
+                      ₹{selectedExperience.price ? selectedExperience.price.toLocaleString('en-IN') : '2,500'}
+                    </strong>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <button
                     onClick={() => {
-                      toast.success('Redirecting to Eco Booking engine...');
+                      toast.success(`Booking request confirmed for ${selectedExperience.name}! Check your email.`);
                       setSelectedExperience(null);
                     }}
-                    className="sample1-hero-btn"
+                    className="safari-search-btn"
                     style={{ flex: 1, justifyContent: 'center' }}
                   >
-                    Confirm & Reserve Ticket
+                    Confirm & Reserve Ticket →
                   </button>
                   <button
                     onClick={() => setSelectedExperience(null)}
                     className="sample1-btn-secondary"
+                    style={{ borderRadius: '8px' }}
                   >
-                    Close
+                    Cancel
                   </button>
                 </div>
               </div>
